@@ -6,7 +6,7 @@ import PostPage from "./pages/PostPage"
 
 function App() {
   return (
-    <div className="max-w-[600px] mx-auto py-2 ">
+    <div className="max-w-[600px] mx-auto py-4">
       <Header />
       <Routes>
         <Route path="/:username" element={<UserPage/>} />

@@ -1,17 +1,28 @@
+import { Instagram } from 'lucide-react'
 import React from 'react'
 
 const UserHeader = () => {
   return (
-    <div className='w-full flex items-center justify-around'>
-        <div className='flex items-center'>
-            <img src='https://avatars.githubusercontent.com/u/7525670?v=4' alt='User' className='w-14 h-14 rounded-full' />
-            <div className='ml-2'>
-            <h1 className='text-lg font-semibold'>Username</h1>
-            <p className='text-sm text-gray-500'>5 posts</p>
+    <>
+    <div className='w-full flex items-center justify-between mt-2'>
+        <div className='flex items-start justify-center gap-1 flex-col'>
+            <h1 className='text-2xl'>Prajwol Shrestha</h1>
+            <div className='flex items-center justify-start gap-2'>
+            <h6>jukerberg</h6>
+            <h6 className='bg-gray-500/40 px-1 rounded-sm text-hello'>thread.net</h6>
             </div>
         </div>
-        <button className='bg-blue-500 text-white px-4 py-2 rounded-lg'>Follow</button>
+    <img src='/zuck-avatar.png' alt='Profile' className='w-16 h-16 rounded-full'/>
     </div>
+    <p className='mt-3'>Co-founder, executive chairman and CEO of Meta Platforms.</p>
+    <div className='flex items-center justify-between mt-2'>
+        <h6 className='text-blue-300'>3.2K followers . instagram.com</h6>
+        <div>
+            <Instagram/>
+
+        </div>
+    </div>
+    </>
   )
 }
 
