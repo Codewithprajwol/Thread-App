@@ -5,9 +5,17 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
   
-
+  import { toast } from "sonner"
+ 
   
   const ThreeDotUserHeader = () => {
+
+    const clickHandler = () => {
+       const url= window.location.href;
+        toast("link copied successfully", "success")
+        navigator.clipboard.writeText(url);
+    }
+    
     return (
         <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -16,10 +24,10 @@ import {
 </div>
 
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>copy link</DropdownMenuItem>
+        <DropdownMenuContent >
+          <DropdownMenuItem onClick={clickHandler} >copy link</DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> 
     )
   }
   

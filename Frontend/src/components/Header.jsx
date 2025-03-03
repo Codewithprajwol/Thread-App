@@ -8,7 +8,6 @@ const Header = () => {
   const { setTheme } = useTheme()
 
 const uiSituation=localStorage.getItem('vite-ui-theme');
-// console.log(uiSituation)
   const toggleDarkMode = () => {
     if (darkMode === "light") {
       setDarkMode("dark")
