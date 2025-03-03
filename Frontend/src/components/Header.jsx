@@ -7,7 +7,8 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState("dark")
   const { setTheme } = useTheme()
 
-
+const uiSituation=localStorage.getItem('vite-ui-theme');
+// console.log(uiSituation)
   const toggleDarkMode = () => {
     if (darkMode === "light") {
       setDarkMode("dark")
@@ -19,7 +20,7 @@ const Header = () => {
   }
   return (
     <div className='w-full flex items-center justify-center cursor-pointer'>
-        <img onClick={toggleDarkMode} src={darkMode=='dark'?LightMode:DarkMode} alt='Dark Mode' className='w-7 h-7 '/>
+        <img onClick={toggleDarkMode} src={ darkMode=="dark"?uiSituation=="light"?DarkMode: LightMode:DarkMode} alt='Dark Mode' className='w-7 h-7 '/>
     </div>
   )
 }
