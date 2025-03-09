@@ -12,14 +12,13 @@ const userSchema=new mongoose({
     password:{
         type:String,
     },
-    confirmPassword:{
-        type:String,
-    },
     following:{
-        type:[String]
+        type:[String],
+        default:[]
     },
     follower:{
-        type:[String]
+        type:[String],
+        default:[]
     },
     isVerified:{
         type:Boolean,
@@ -31,7 +30,7 @@ const userSchema=new mongoose({
     },
     passwordResetToken:String,
     PasswordResetTokenExpiresAt:Date,
-    VerificationToken:String,
+    verificationToken:String,
     verificationTokenExpiresAt:Date
 },{
     timeStamp:true,
