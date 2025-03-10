@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
-export const generateTokenAndSetCookies=async(userId,res)=>{
+export const generateTokenAndSetCookies=(res,userId)=>{
+   try{
     const token=jwt.sign({userId},process.env.JWT_SECRET,{expiresIn:'15d'})
-    console.log(token)
 
     res.cookie('jwt',token,{
         sameSite:'strict',
@@ -10,4 +10,7 @@ export const generateTokenAndSetCookies=async(userId,res)=>{
         httpOnly:true,
         secure:process.env.NODE_ENV==="production"
     })
+   }catch(err){
+    console.log(err.message)
+   }
 }
