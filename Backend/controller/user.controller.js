@@ -32,3 +32,36 @@ export const createUser = async (req, res) => {
   res.status(201).json({user:{...user._doc,password:undefined}})
   
 };
+
+
+export const loginUser=async(req,res)=>{
+  try{
+    const {email, password}=req.body;
+    if(!email || !password){
+      res.status(400).json({error:"all field required"});
+      return 
+    }
+    const user=await User.findOne({email:email});
+    if(!user){
+      res.status(400).json({error:"User not found"});
+      return 
+    }
+    res.status(200).json({message:"user Logged in Successfully",user:user})
+
+  }catch(err){
+    console.log(err)
+    res.status(500).json({error:"internal server error"})
+  }
+}
+
+
+export const logoutUser=async(req,res)=>{
+
+  try{
+      res.cookie('jwt','');
+      res.status(200).json({messge:"user loggedout successfully"});
+  }catch(error){
+    console.log("error in logoutUserController",error.message)
+    res.status(500).json({error:"internal server error"})
+  }
+}
