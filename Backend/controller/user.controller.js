@@ -2,9 +2,11 @@
 import bcrypt from 'bcrypt'
 import User from "../model/user.model.js"
 import { generateTokenAndSetCookies } from '../utils/generateTokenAndSetCookies.js';
+import { sendVerificationEmail } from '../mailtrap/email.js';
+
 export const createUser = async (req, res) => {
+ try{
   const { email, name, password } = req.body;
-  console.log(email,name,password)
 
   if (!email || !name || !password) {
     res.status(400).json({ error: "All field are required " });
@@ -25,11 +27,17 @@ export const createUser = async (req, res) => {
       email,
       password:hashPassword,
       verificationToken:verificationToken,
-      verificationTokenExpiresAt:Date.now()+24*60*60,
+      verificationTokenExpiresAt:Date.now()+24*60*60*1000,
   })
   await user.save();
-   generateTokenAndSetCookies(res,user._id)
+   generateTokenAndSetCookies(res,user._id);
+   await sendVerificationEmail(user.email,verificationToken);
   res.status(201).json({user:{...user._doc,password:undefined}})
+
+ }catch(err){
+  console.log("error in signup controller",err.message);
+  res.status(500).json({error:"internal Server Error"});
+ }
   
 };
 
@@ -46,6 +54,7 @@ export const loginUser=async(req,res)=>{
       res.status(400).json({error:"User not found"});
       return 
     }
+    generateTokenAndSetCookies(res,user._id)
     res.status(200).json({message:"user Logged in Successfully",user:user})
 
   }catch(err){
