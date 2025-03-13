@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt'
 import User from "../model/user.model.js"
 import { generateTokenAndSetCookies } from '../utils/generateTokenAndSetCookies.js';
-import { sendVerificationEmail } from '../mailtrap/email.js';
+import { sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
 
 export const createUser = async (req, res) => {
  try{
@@ -79,8 +79,9 @@ export const logoutUser=async(req,res)=>{
 export const verifyEmail=async(req,res)=>{
   try{
     const {code}=req.body;
-    const user=await User.find({'verificationToken':code,'verificationTokenExpiresAt':{$gt:new Date()}});
-    if(!validToken) return res.status(400).json({error:'Token has be expired ..invalid'});
+    const user=await User.findOne({'verificationToken':code,'verificationTokenExpiresAt':{$gt:new Date()}});
+    if(!user) return res.status(400).json({error:'Token has be expired ..invalid'});
+    console.log(user)
     user.isVerified=true;
     user.verificationToken=undefined;
     user.verificationTokenExpiresAt=undefined;
