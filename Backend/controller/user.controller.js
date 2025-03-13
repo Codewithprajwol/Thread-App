@@ -74,3 +74,21 @@ export const logoutUser=async(req,res)=>{
     res.status(500).json({error:"internal server error"})
   }
 }
+
+
+export const verifyEmail=async(req,res)=>{
+  try{
+    const {code}=req.body;
+    const user=await User.find({'verificationToken':code,'verificationTokenExpiresAt':{$gt:new Date()}});
+    if(!validToken) return res.status(400).json({error:'Token has be expired ..invalid'});
+    user.isVerified=true;
+    user.verificationToken=undefined;
+    user.verificationTokenExpiresAt=undefined;
+    await user.save()
+    await sendWelcomeEmail(user.email,user.name);
+    res.status(200).json({message:"user verified successfully"})
+  }catch(err){
+    console.log('error in verifyEmail controller',err.message);
+    res.status(500).json({error:"Internal Server Error"});
+  }
+}
