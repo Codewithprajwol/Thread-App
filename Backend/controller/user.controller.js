@@ -4,7 +4,7 @@ import crypto from 'crypto'
 
 import User from "../model/user.model.js"
 import { generateTokenAndSetCookies } from '../utils/generateTokenAndSetCookies.js';
-import { sendForgetPasswordEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
+import { sendForgetPasswordEmail, sendPasswordResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
 
 export const createUser = async (req, res) => {
  try{
@@ -55,6 +55,11 @@ export const loginUser=async(req,res)=>{
     if(!user){
       res.status(400).json({error:"User not found"});
       return 
+    }
+    const validPassword= await bcrypt.compare(password,user.password);
+    if(!validPassword){
+      res.status(400).json({error:"Invalid Password"});
+      return
     }
     generateTokenAndSetCookies(res,user._id)
     res.status(200).json({message:"user Logged in Successfully",user:user})
@@ -121,7 +126,23 @@ export const forgetPassword=async(req,res)=>{
 
 export const resetPassword=async(req,res)=>{
   try{
-
+    const {newPassword}=req.body;
+    const {token}=req.params;
+    const user=await User.findOne({passwordResetToken:token});
+    if(!user){
+      res.status(400).json({error:"user not found"});
+      return;
+    }
+    if(user.PasswordResetTokenExpiresAt<Date.now()){
+      res.status(400).json({error:"reset token expired"});
+      return;
+      }
+    const salt=await bcrypt.genSalt(10);
+    const hashPassword=await bcrypt.hash(newPassword,salt);
+      user.password=hashPassword;
+      await user.save();
+      await sendPasswordResetSuccessEmail(user.email);
+       res.status(200).json({message:"password reset successfully"});
   }catch(error){
     console.log("error in resetPassword controller",error.message);
     res.status(500).json({error:"internal server error"});
