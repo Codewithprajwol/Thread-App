@@ -140,8 +140,10 @@ export const resetPassword=async(req,res)=>{
     const salt=await bcrypt.genSalt(10);
     const hashPassword=await bcrypt.hash(newPassword,salt);
       user.password=hashPassword;
-      await user.save();
       await sendPasswordResetSuccessEmail(user.email);
+      user.passwordResetToken=undefined;
+      user.PasswordResetTokenExpiresAt=undefined;
+      await user.save();
        res.status(200).json({message:"password reset successfully"});
   }catch(error){
     console.log("error in resetPassword controller",error.message);
