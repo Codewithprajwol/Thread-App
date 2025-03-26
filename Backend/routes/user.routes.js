@@ -1,5 +1,5 @@
 import express from 'express'
-import { createUser, forgetPassword,validateUser,followUnfollowUser, loginUser, logoutUser, resetPassword, verifyEmail } from '../controller/user.controller.js';
+import { createUser, forgetPassword,updateProfile,validateUser,followUnfollowUser, loginUser, logoutUser, resetPassword, verifyEmail } from '../controller/user.controller.js';
 import { protectRoute } from '../middleware/protectRoute.js';
 
 const router=express.Router();
@@ -16,4 +16,5 @@ router.post('/reset-password/:token',resetPassword)
 router.post('/checkauth',protectRoute, validateUser)
 
 router.post('/follow/:id',protectRoute,followUnfollowUser);
+router.post('/updateprofile/:id',protectRoute,updateProfile);
 export default router;

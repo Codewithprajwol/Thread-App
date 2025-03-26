@@ -8,9 +8,9 @@ import { sendForgetPasswordEmail, sendPasswordResetSuccessEmail, sendVerificatio
 
 export const createUser = async (req, res) => {
  try{
-  const { email, name, password } = req.body;
+  const { email, name, password,username } = req.body;
 
-  if (!email || !name || !password) {
+  if (!email || !name || !password || !username) {
     res.status(400).json({ error: "All field are required " });
     return;
   }
@@ -26,6 +26,7 @@ export const createUser = async (req, res) => {
 
   const user=new User({
       name,
+      username,
       email,
       password:hashPassword,
       verificationToken:verificationToken,
@@ -191,6 +192,28 @@ export const followUnfollowUser=async(req,res)=>{
     
   }catch(error){
     console.log("error in followUnfollowUser controller",error.message);
+    res.status(500).json({error:"internal server error"});
+  }
+}
+
+export const updateProfile=async(req,res)=>{
+  try{
+    const {id}=req.params;
+    const {name,profilePic,bio,username}=req.body;
+    const user=await User.findById(id);
+    if(!user){
+      res.status(400).json({error:"user not found"});
+      return;
+    }
+    user.name=name;
+    user.profile=profilePic;
+    user.bio=bio;
+    user.username=username;
+    await user.save();
+    res.status(200).json({message:"profile updated successfully"});
+
+  }catch(error){
+    console.log("error in updateProfile controller",error.message);
     res.status(500).json({error:"internal server error"});
   }
 }
