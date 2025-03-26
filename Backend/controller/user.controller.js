@@ -47,26 +47,28 @@ export const createUser = async (req, res) => {
 
 export const loginUser=async(req,res)=>{
   try{
-    const {email, password}=req.body;
-    if(!email || !password){
+    const {emailOrUsername, password}=req.body;
+    if(!emailOrUsername || !password){
       res.status(400).json({error:"all field required"});
       return 
     }
-    const user=await User.findOne({email:email});
+    const user=await User.findOne({$or:[{email:emailOrUsername},{username:emailOrUsername}]});
     if(!user){
       res.status(400).json({error:"User not found"});
       return 
     }
-    const validPassword= await bcrypt.compare(password,user.password);
+    const validPassword= bcrypt.compare(password,user.password);
     if(!validPassword){
       res.status(400).json({error:"Invalid Password"});
       return
     }
     generateTokenAndSetCookies(res,user._id)
-    res.status(200).json({message:"user Logged in Successfully",user:user})
+    const data=user._doc;
+    delete data.password;
+    res.status(200).json({message:"user Logged in Successfully",user:data});
 
   }catch(err){
-    console.log(err)
+    console.log('error in login user controller',err)
     res.status(500).json({error:"internal server error"})
   }
 }
