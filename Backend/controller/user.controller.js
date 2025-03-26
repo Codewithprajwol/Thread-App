@@ -150,3 +150,14 @@ export const resetPassword=async(req,res)=>{
     res.status(500).json({error:"internal server error"});
   }
 }
+
+
+export const validateUser=async(req,res)=>{
+  try{
+    
+
+  }catch(error){
+    console.log("error in validateUser controller",error.message);
+    res.status(500).json({error:"internal server error"});
+  }
+}

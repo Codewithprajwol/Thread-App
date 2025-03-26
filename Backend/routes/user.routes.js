@@ -1,5 +1,5 @@
 import express from 'express'
-import { createUser, forgetPassword, loginUser, logoutUser, resetPassword, verifyEmail } from '../controller/user.controller.js';
+import { createUser, forgetPassword,validateUser, loginUser, logoutUser, resetPassword, verifyEmail } from '../controller/user.controller.js';
 
 const router=express.Router();
 
@@ -12,4 +12,5 @@ router.post('/verify-email',verifyEmail)
 router.post('/forget-password',forgetPassword)
 router.post('/reset-password/:token',resetPassword)
 
+router.post('/checkauth',validateUser)
 export default router;
