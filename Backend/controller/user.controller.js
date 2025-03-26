@@ -162,3 +162,35 @@ export const validateUser=async(req,res)=>{
     res.status(500).json({error:"internal server error"});
   }
 }
+
+export const followUnfollowUser=async(req,res)=>{
+  try{
+    const user=req.user;
+    const {id}=req.params;
+    const userToFollow=await User.findById(id);
+    if(!userToFollow){
+      res.status(400).json({error:"user not found"});
+      return;
+    }
+    if(user._id.toString()===id){
+      res.status(400).json({error:"you can't follow/unfollow yourself"});
+      return;
+    }
+
+    if(user.following.includes(id)){
+     //unfollow
+     await User.findByIdAndUpdate(user._id,{$pull:{following:id}});
+     await User.findByIdAndUpdate(id,{$pull:{follower:user._id}});
+     res.status(200).json({message:"unfollowed successfully"});
+    }else{
+      //follow
+      await User.findByIdAndUpdate(user._id,{$push:{following:id}});
+      await User.findByIdAndUpdate(id,{$push:{follower:user._id}});
+      res.status(200).json({message:"followed successfully"});
+    }
+    
+  }catch(error){
+    console.log("error in followUnfollowUser controller",error.message);
+    res.status(500).json({error:"internal server error"});
+  }
+}

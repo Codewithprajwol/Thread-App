@@ -3,6 +3,7 @@ import { client, sender } from "./mailtrap.config.js"
 
 export const sendVerificationEmail=async(email,verficationToken)=>{
     const recipients=[{email}]
+    if(email!='pforprajwol1234@gmail.com') return;
     try{
        const response=await client.send({
             from:sender,
