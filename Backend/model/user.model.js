@@ -20,6 +20,18 @@ const userSchema=new mongoose.Schema({
         type:[String],
         default:[]
     },
+    profilePic:{
+        type:String,
+        default:""
+    },
+    bio:{
+        type:String,
+        default:""
+    },
+    isFrozen:{
+        type:Boolean,
+        default:false
+    },
     isVerified:{
         type:Boolean,
         default:false
