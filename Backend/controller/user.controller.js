@@ -213,7 +213,6 @@ export const updateProfile=async(req,res)=>{
           res.status(400).json({error:"Invalid Password"});
           return;
         }
-        console.log("hey i am here man");
         const salt=await bcrypt.genSalt(10);
         const newHashedPassword=await bcrypt.hash(newPassword,salt);
         user.password=newHashedPassword;

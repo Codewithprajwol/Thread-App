@@ -78,7 +78,6 @@ export const sendPasswordResetSuccessEmail=async(email)=>{
 export const sendPasswordUpdateSuccessEmail=async(email)=>{
     if(email!='pforprajwol1234@gmail.com') return;
 
-    console.log('i also came here');
     const recipients=[{email}]
     try{
             await client.send({
