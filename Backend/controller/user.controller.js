@@ -4,7 +4,7 @@ import crypto from 'crypto'
 
 import User from "../model/user.model.js"
 import { generateTokenAndSetCookies } from '../utils/generateTokenAndSetCookies.js';
-import { sendForgetPasswordEmail, sendPasswordResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
+import { sendForgetPasswordEmail, sendPasswordResetSuccessEmail, sendPasswordUpdateSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
 
 export const createUser = async (req, res) => {
  try{
@@ -201,16 +201,29 @@ export const followUnfollowUser=async(req,res)=>{
 export const updateProfile=async(req,res)=>{
   try{
     const {id}=req.params;
-    const {name,profilePic,bio,username}=req.body;
+    const {name,profilePic,bio,username,password,newPassword}=req.body;
     const user=await User.findById(id);
     if(!user){
       res.status(400).json({error:"user not found"});
       return;
     }
-    user.name=name;
-    user.profile=profilePic;
-    user.bio=bio;
-    user.username=username;
+    if(password && newPassword){
+        const validPassword=await bcrypt.compare(password,user.password);
+        if(!validPassword){
+          res.status(400).json({error:"Invalid Password"});
+          return;
+        }
+        console.log("hey i am here man");
+        const salt=await bcrypt.genSalt(10);
+        const newHashedPassword=await bcrypt.hash(newPassword,salt);
+        user.password=newHashedPassword;
+        await sendPasswordUpdateSuccessEmail(user.email);
+      }
+   
+    user.name=name || user.name;
+    user.profile=profilePic || user.profilePic;
+    user.bio=bio || user.bio;
+    user.username=username || user.username;
     await user.save();
     res.status(200).json({message:"profile updated successfully"});
 
