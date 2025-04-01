@@ -40,7 +40,6 @@ export const createPost=async(req,res)=>{
 export const getAllPost=async(req,res)=>{
     try{
         const posts=await Post.find({postedBy:req.user._id});
-        console.log(posts)
         if(!posts){
             res.status(400).json({error:"no posts found"})
             return;
