@@ -114,3 +114,30 @@ export const likeUnlikePost=async(req,res)=>{
         res.status(500).json({error:"internal server error"});
     }
 }
+
+export const replypost=async(req,res)=>{
+      const {id}=req.params;
+      const {text,profilePic,username}=req.body;
+      try{
+        if(!text || !profilePic || !username){
+            res.status(400).json({error:"text,profilePic and username are required"});
+            return;
+        }
+        const post=await Post.findById(id);
+        if(!post){
+            res.status(400).json({error:"post not found"});
+            return;
+        }
+        const reply={
+            userId:req.user._id,
+            text:text,
+            profilePic:profilePic,
+            username:username,
+        }
+        await Post.findByIdAndUpdate(id,{$push:{replies:reply}});
+        res.status(200).json({message:"reply added successfully"});
+      }catch(error){
+            console.log("error in replypost controller",error.message);
+            res.status(500).json({error:"internal server error"});
+      }
+}
