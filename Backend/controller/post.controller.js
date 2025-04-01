@@ -37,20 +37,21 @@ export const createPost=async(req,res)=>{
 }
 
 
-// export const getAllPost=async(req,res)=>{
-//     try{
-//         const posts=await Post.find({}).populate("postedBy","_id name profilePic").sort({createdAt:-1});
-//         if(!posts){
-//             res.status(400).json({error:"no posts found"})
-//             return;
-//         }
-//         res.status(200).json({posts:posts});
+export const getAllPost=async(req,res)=>{
+    try{
+        const posts=await Post.find({postedBy:req.user._id});
+        console.log(posts)
+        if(!posts){
+            res.status(400).json({error:"no posts found"})
+            return;
+        }
+        res.status(200).json({posts:posts});
 
-//     }catch(error){
-//         console.log("error in getPost controller",error.message);
-//         res.status(500).json({error:"internal server error"});
-//     }
-// }
+    }catch(error){
+        console.log("error in getPost controller",error.message);
+        res.status(500).json({error:"internal server error"});
+    }
+}
 
 export const getPostById=async(req,res)=>{
     try{
