@@ -2,7 +2,7 @@ import express from 'express'
 import 'dotenv/config'
 
 import userRoute from './routes/user.routes.js'
-import postRoute from './routes/post.route.js'
+import postRoute from './routes/post.routes.js'
 
 import { connectDb } from './config/db.config.js';
 import cookieParser from 'cookie-parser';

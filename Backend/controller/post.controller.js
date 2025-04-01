@@ -35,3 +35,57 @@ export const createPost=async(req,res)=>{
         res.status(500).json({error:"internal server error"});
     }
 }
+
+
+// export const getAllPost=async(req,res)=>{
+//     try{
+//         const posts=await Post.find({}).populate("postedBy","_id name profilePic").sort({createdAt:-1});
+//         if(!posts){
+//             res.status(400).json({error:"no posts found"})
+//             return;
+//         }
+//         res.status(200).json({posts:posts});
+
+//     }catch(error){
+//         console.log("error in getPost controller",error.message);
+//         res.status(500).json({error:"internal server error"});
+//     }
+// }
+
+export const getPostById=async(req,res)=>{
+    try{
+
+            const {id}=req.params;
+            const post=await Post.findById(id);
+            console.log(post)
+            if(!post){
+              res.status(400).json({error:"post not found"});
+              return;
+            }
+            res.status(200).json({post:post});
+
+    }catch(error){
+        console.log("error in getPostById controller",error.message);
+        res.status(500).json({error:"internal server error"});
+    }
+}
+
+export const deletePost=async(req,res)=>{
+     try{
+          const {id}=req.params;
+          const post=await Post.findById(id);
+          if(!post){
+                res.status(400).json({error:"post not found"});
+                return;
+          }
+          if(post.postedBy.toString()!==req.user._id.toString()){
+                res.status(400).json({error:"you are not authorized to delete this post"})
+                return;
+          }
+          await Post.findByIdAndDelete(id);
+          res.status(200).json({message:"post deleted successfully"});
+     }catch(error){
+          console.log("error in deletePost controller",error.message);
+          res.status(500).json({error:"internal server error"});
+     }    
+}
