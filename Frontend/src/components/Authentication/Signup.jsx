@@ -20,12 +20,17 @@ import {
 import { Input } from '@/components/ui/input'
 import  PasswordInput  from '@/components/ui/PasswordInput'
 import { Link } from 'react-router-dom'
+import { useAuthStore } from '@/store/useAuthStore'
 
 
 export default function Signup({setAuthScreenState}) {
+
+  // Zustand store for authentication state
+  const {signUp, isLoading}=useAuthStore();
   const form = useForm({
     defaultValues: {
       name: '',
+      username:'',
       email: '',
       password: '',
       confirmPassword: '',
@@ -35,11 +40,16 @@ export default function Signup({setAuthScreenState}) {
   async function onSubmit(values) {
     try {
       // Assuming an async registration function
-      console.log(values)
       if(values.password !== values.confirmPassword) {
         toast.error("Passwords do not match")
         return
       }
+        await signUp({
+          username:values.username,
+          name:values.name,
+          email: values.email,
+          password: values.password,
+        })
     } catch (error) {
       console.error('Form submission error', error)
       toast.error('Failed to submit the form. Please try again.')
@@ -68,6 +78,21 @@ export default function Signup({setAuthScreenState}) {
                       <FormLabel htmlFor="name">Full Name</FormLabel>
                       <FormControl>
                         <Input id="name" placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* nickName Field */}
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="name">Nick Name</FormLabel>
+                      <FormControl>
+                        <Input id="username" placeholder="Johndu" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
