@@ -141,3 +141,18 @@ export const replypost=async(req,res)=>{
             res.status(500).json({error:"internal server error"});
       }
 }
+
+export const feedPosts=async(req,res)=>{
+    try{
+        const user=req.user;
+        const posts=await Post.find({postedBy:{$in:user.following}}).sort({createdAt:-1});
+        if(!posts){
+            res.status(400).json({error:"no posts found"})
+            return;
+        }
+        res.status(200).json({posts:posts});
+    }catch(error){
+        console.log("error in feetPost controller",error.message);
+        res.status(500).json({error:"internal server error"});
+    }
+}
