@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
-export default function ForgetPasswordPreview() {
+export default function ForgetPasswordPage() {
   const form = useForm({
     defaultValues: {
       email: '',
@@ -39,8 +39,8 @@ export default function ForgetPasswordPreview() {
   }
 
   return (
-    <div className="flex min-h-[40vh] h-full w-full items-center justify-center px-4">
-      <Card className="mx-auto max-w-sm">
+    <div className="flex min-h-[40vh] h-full w-full items-center justify-center px-4 mt-7">
+      <Card className="mx-auto w-[80%] ">
         <CardHeader>
           <CardTitle className="text-2xl">Forgot Password</CardTitle>
           <CardDescription>

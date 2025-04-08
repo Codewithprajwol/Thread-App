@@ -20,7 +20,7 @@ import {
 import  PasswordInput  from '@/components/ui/PasswordInput'
 
 
-export default function ResetPasswordPreview() {
+export default function ResetPasswordPage() {
   const form = useForm({
     defaultValues: {
       password: '',
@@ -42,8 +42,8 @@ export default function ResetPasswordPreview() {
   }
 
   return (
-    <div className="flex min-h-[50vh] h-full w-full items-center justify-center px-4">
-      <Card className="mx-auto max-w-sm">
+    <div className="flex min-h-[50vh] mt-7 h-full w-full items-center justify-center px-4">
+      <Card className="mx-auto w-[80%] ">
         <CardHeader>
           <CardTitle className="text-2xl">Reset Password</CardTitle>
           <CardDescription>
