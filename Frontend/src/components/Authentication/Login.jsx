@@ -1,5 +1,4 @@
 
-import Link from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -21,10 +20,11 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/PasswordInput'
+import { Link } from 'react-router-dom'
 
 
 
-export default function Login() {
+export default function Login({setAuthScreenState}) {
   const form = useForm({
     defaultValues: {
       email: '',
@@ -43,8 +43,8 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col min-h-[50vh] h-full w-full items-center justify-center px-4">
-      <Card className="mx-auto max-w-sm">
+    <div className="flex flex-col min-h-[50vh] h-full w-full items-center justify-center px-4 mt-7">
+      <Card className="mx-auto w-[80%]">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -79,7 +79,7 @@ export default function Login() {
                   name="password"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between gap-5 items-center ">
                         <FormLabel htmlFor="password">Password</FormLabel>
                         <Link
                           href="#"
@@ -111,7 +111,7 @@ export default function Login() {
           </Form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
-            <Link to="#" className="underline">
+            <Link to="#" className="underline" onClick={()=>{setAuthScreenState('signup')}}>
               Sign up
             </Link>
           </div>
