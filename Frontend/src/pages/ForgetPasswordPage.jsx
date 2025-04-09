@@ -71,7 +71,7 @@ export default function ForgetPasswordPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full cursor-pointer">
                   Send Reset Link
                 </Button>
               </div>

@@ -50,6 +50,7 @@ export default function Signup({setAuthScreenState}) {
           email: values.email,
           password: values.password,
         })
+        form.reset();
     } catch (error) {
       console.error('Form submission error', error)
       toast.error('Failed to submit the form. Please try again.')

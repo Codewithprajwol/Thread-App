@@ -14,6 +14,11 @@ export const createUser = async (req, res) => {
     res.status(400).json({ error: "All field are required " });
     return;
   }
+  const existingNickName=await User.findOne({username})
+  if(existingNickName){
+      res.status(400).json({error:"nick name Already Exists"});
+      return
+  }
   const existingUser=await User.findOne({email})
   if(existingUser){
       res.status(400).json({error:"Email Already Exists"});
@@ -77,7 +82,7 @@ export const loginUser=async(req,res)=>{
 export const logoutUser=async(req,res)=>{
 
   try{
-      res.cookie('jwt','');
+      res.clearCookie('jwt');
       res.status(200).json({messge:"user loggedout successfully"});
   }catch(error){
     console.log("error in logoutUserController",error.message)
@@ -110,7 +115,7 @@ export const forgetPassword=async(req,res)=>{
         const {email}=req.body;
         const user=await User.findOne({email});
         if(!user){
-          res.status(400).json({error:"user not found"});
+          res.status(400).json({error:"Email not found"});
           return;
         }
         const resetToken=crypto.randomBytes(20).toString('hex');

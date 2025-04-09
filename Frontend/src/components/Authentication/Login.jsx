@@ -21,13 +21,16 @@ import {
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/PasswordInput'
 import { Link } from 'react-router-dom'
+import { useAuthStore } from '@/store/useAuthStore'
 
 
 
 export default function Login({setAuthScreenState}) {
+  // Zustand store for authentication state 
+  const {logIn, isLoading}=useAuthStore();
   const form = useForm({
     defaultValues: {
-      email: '',
+      emailOrUsername: '',
       password: '',
     },
   })
@@ -35,7 +38,11 @@ export default function Login({setAuthScreenState}) {
   async function onSubmit(values) {
     try {
       // Assuming an async login function
-      console.log(values);
+      await logIn({
+        emailOrUsername: values.emailOrUsername,
+        password: values.password,
+      })
+      form.reset()
     } catch (error) {
       console.error('Form submission error', error)
       toast.error('Failed to submit the form. Please try again.')
@@ -57,15 +64,15 @@ export default function Login({setAuthScreenState}) {
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="emailOrUsername"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <FormLabel htmlFor="email">Email Or Username</FormLabel>
                       <FormControl>
                         <Input
                           id="email"
-                          placeholder="johndoe@mail.com"
-                          type="email"
+                          placeholder="email / username"
+                          type="text"
                           autoComplete="email"
                           {...field}
                         />
@@ -82,7 +89,7 @@ export default function Login({setAuthScreenState}) {
                       <div className="flex justify-between gap-5 items-center ">
                         <FormLabel htmlFor="password">Password</FormLabel>
                         <Link
-                          href="#"
+                          to="/forget-password"
                           className="ml-auto inline-block text-sm underline"
                         >
                           Forgot your password?
