@@ -164,7 +164,6 @@ export const validateUser=async(req,res)=>{
   try{
     const user=req.user;
     res.status(200).json({user:user});
-    console.log("user validated successfully");
   }catch(error){
     console.log("error in validateUser controller",error.message);
     res.status(500).json({error:"internal server error"});

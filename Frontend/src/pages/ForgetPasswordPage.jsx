@@ -19,8 +19,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useAuthStore } from '@/store/useAuthStore'
+import { ArrowLeft } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function ForgetPasswordPage() {
+  const {forgetPassword,isLoading}=useAuthStore()
   const form = useForm({
     defaultValues: {
       email: '',
@@ -30,6 +34,7 @@ export default function ForgetPasswordPage() {
   async function onSubmit(values) {
     try {
       // Assuming a function to send reset email
+      await forgetPassword();
       console.log(values)
       toast.success('Password reset email sent. Please check your inbox.')
     } catch (error) {
@@ -77,6 +82,7 @@ export default function ForgetPasswordPage() {
               </div>
             </form>
           </Form>
+          <Link to="/auth" className='flex items-center justify-center gap-2 mt-2'><ArrowLeft/> Login  </Link>
         </CardContent>
       </Card>
     </div>
