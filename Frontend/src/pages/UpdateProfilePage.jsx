@@ -48,8 +48,6 @@ export default function UpdateProfilePage({user}) {
       reader.readAsDataURL(file)
     }
   }
-   console.log(newProfile)
-
   return (
     <form onSubmit={submitHandler}>
       <div className="px-4 space-y-6 sm:px-6">
