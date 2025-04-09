@@ -102,6 +102,34 @@ export const useAuthStore = create((set) => ({
             set({isLoading:false});
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
+    },
+    updateProfile:async({id,name,profilePic,bio,username, password,newPassword})=>{
+        set({isLoading:true});
+        try{
+            const response=await axios.post(`/user/updateprofile/${id}`,{username,name,profilePic,bio,username,password,newPassword});
+            if(response.status===200){
+                set({isLoading:false});
+                toast.success(response.data.message || "Profile updated successfully!")
+            }
+        }catch(error){
+            console.error("Error in updating profile:",error);
+            set({isLoading:false});
+            toast.error(error.response.data.error || error.response.data.message || "An error occured");
+        }
+    },
+    followUnfollow:async({id})=>{
+        set({isLoading:true});
+        try{
+            const response=await axios.post(`/user/follow/${id}`);
+            if(response.status===200){
+                set({isLoading:false});
+                toast.success(response.data.message || "Follow/Unfollow action successful!")
+            }
+        }catch(error){
+            console.error("Error in follow/unfollow:",error);
+            set({isLoading:false});
+            toast.error(error.response.data.error || error.response.data.message || "An error occured");
+        }
     }
 
 }))
