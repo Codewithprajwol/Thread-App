@@ -205,7 +205,12 @@ export const followUnfollowUser=async(req,res)=>{
 export const updateProfile=async(req,res)=>{
   try{
     const {id}=req.params;
-    const {name,profilePic,bio,username,password,newPassword}=req.body;
+    const {name,profilePic,bio,username,password,newPassword,email}=req.body;
+    console.log(username,name,profilePic,bio,password,newPassword)
+    if(!name && !profilePic && !bio && !username && !password && !newPassword  &&!email){
+      res.status(400).json({error:"atleast one field required"});
+      return;
+    }
     const user=await User.findById(id);
     if(!user){
       res.status(400).json({error:"user not found"});
@@ -224,9 +229,10 @@ export const updateProfile=async(req,res)=>{
       }
    
     user.name=name || user.name;
-    user.profile=profilePic || user.profilePic;
+    user.profilePic=profilePic || user.profilePic;
     user.bio=bio || user.bio;
     user.username=username || user.username;
+    user.email=email || user.email;
     await user.save();
     res.status(200).json({message:"profile updated successfully"});
 

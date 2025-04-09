@@ -27,7 +27,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 
 export default function Login({setAuthScreenState}) {
   // Zustand store for authentication state 
-  const {logIn, isLoading}=useAuthStore();
+  const {logIn}=useAuthStore();
   const form = useForm({
     defaultValues: {
       emailOrUsername: '',
@@ -42,6 +42,7 @@ export default function Login({setAuthScreenState}) {
         emailOrUsername: values.emailOrUsername,
         password: values.password,
       })
+      toast.success('hello')
       form.reset()
     } catch (error) {
       console.error('Form submission error', error)

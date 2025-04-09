@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+import { toast } from 'react-hot-toast';
 import axios from '../lib/axios'
 import { create } from 'zustand';
 
@@ -103,10 +103,10 @@ export const useAuthStore = create((set) => ({
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
     },
-    updateProfile:async({id,name,profilePic,bio,username, password,newPassword})=>{
+    updateProfile:async({id,name,profilePic,bio,username,email, password,newPassword})=>{
         set({isLoading:true});
         try{
-            const response=await axios.post(`/user/updateprofile/${id}`,{username,name,profilePic,bio,username,password,newPassword});
+            const response=await axios.post(`/user/updateprofile/${id}`,{username,name,profilePic,bio,password,newPassword,email});
             if(response.status===200){
                 set({isLoading:false});
                 toast.success(response.data.message || "Profile updated successfully!")

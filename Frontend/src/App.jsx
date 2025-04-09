@@ -2,7 +2,7 @@ import Header from "@/components/Header"
 import { Navigate, Route, Routes } from "react-router-dom"
 import UserPage from "./pages/UserPage"
 import PostPage from "./pages/PostPage"
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "react-hot-toast"
 import AuthPage from "./pages/AuthPage"
 import EmailVerificationPage from "./pages/EmailVerificationPage"
 import ResetPasswordPage from "./pages/ResetPasswordPage"
@@ -13,12 +13,12 @@ import HomePage from "./pages/HomePage"
 import UpdateProfilePage from "./pages/UpdateProfilePage"
 
 function App() {
-  const {checkAuth,user}=useAuthStore();
-  console.log(user)
+  const {checkAuth,user,isLoading}=useAuthStore();
   useEffect(()=>{
     checkAuth();
   },[])
-  if(!user){
+  
+  if(isLoading){
    return <h1 className="text-center text-3xl text-bold">loading....</h1>
     
   }
@@ -33,7 +33,7 @@ function App() {
         <Route path="/verify-email" element={<EmailVerificationPage/>}/>
         <Route path="/forget-password" element={<ForgetPasswordPage/>}/>
         <Route path="/reset-password/:token" element={<ResetPasswordPage />}/>
-        <Route path="/updateProfile" element={<UpdateProfilePage/>}/>
+        <Route path="/updateProfile" element={<UpdateProfilePage user={user}/>}/>
       </Routes>
       <Toaster/>
     </div>
