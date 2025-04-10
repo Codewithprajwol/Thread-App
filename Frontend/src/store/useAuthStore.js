@@ -1,4 +1,4 @@
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 import axios from '../lib/axios'
 import { create } from 'zustand';
 
@@ -34,7 +34,7 @@ export const useAuthStore = create((set) => ({
         } catch (error) {
             console.error("Error in login:", error);
             set({ isLoading: false });
-            toast.error(error.response.data.error || error.response.data.message || "An error occured");
+            toast.error(error.response.data.errors[0]|| "An error occured");
         }
     },
     forgetPassword: async ({ email }) => {
@@ -114,7 +114,7 @@ export const useAuthStore = create((set) => ({
         }catch(error){
             console.error("Error in updating profile:",error);
             set({isLoading:false});
-            toast.error(error.response.data.error || error.response.data.message || "An error occured");
+            toast.error(error.response.data.errors[0] || error.response.data.message || "An error occured",id="profile-update-error");
         }
     },
     followUnfollow:async({id})=>{

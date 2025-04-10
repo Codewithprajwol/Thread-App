@@ -42,7 +42,6 @@ export default function Login({setAuthScreenState}) {
         emailOrUsername: values.emailOrUsername,
         password: values.password,
       })
-      toast.success('hello')
       form.reset()
     } catch (error) {
       console.error('Form submission error', error)

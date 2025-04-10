@@ -5,10 +5,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useRef, useState} from "react"
 import { useAuthStore } from "@/store/useAuthStore"
+import { Loader } from "lucide-react"
+
 
 export default function UpdateProfilePage({user}) {
   const {updateProfile,isLoading}=useAuthStore()
-
   const [newProfile, setNewProfile] = useState({
     name:'',
     username:'',
@@ -112,7 +113,12 @@ export default function UpdateProfilePage({user}) {
           </Card>
         </div>
         <div className="pt-6">
-          <Button type="submit">{isLoading? "updating...":"update"}</Button>
+          <Button type="submit">{isLoading ? (
+						<>
+							<Loader className='mr-2 h-5 w-5 animate-spin' aria-hidden='true' />
+							Loading...
+						</>
+					):"update"}</Button>
         </div>
       </div>
     </form>

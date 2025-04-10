@@ -207,7 +207,6 @@ export const updateProfile=async(req,res)=>{
   try{
     const {id}=req.params;
     const {name,profilePic,bio,username,password,newPassword,email}=req.body;
-    console.log(username,name,profilePic,bio,password,newPassword)
     if(!name && !profilePic && !bio && !username && !password && !newPassword  &&!email){
       res.status(400).json({error:"atleast one field required"});
       return;
@@ -240,7 +239,6 @@ export const updateProfile=async(req,res)=>{
             console.log('errror checking image in cloudinary',err.message);
         }
       }
-      console.log(cloudinaryResponse.secure_url)
    
     user.name=name || user.name;
     user.profilePic=cloudinaryResponse?.secure_url || user.profilePic;
@@ -251,7 +249,16 @@ export const updateProfile=async(req,res)=>{
     res.status(200).json({message:"profile updated successfully"});
 
   }catch(error){
-    console.log("error in updateProfile controller",error.message);
+    if (error.name === 'ValidationError') {
+      const errorMessages = Object.values(error.errors).map(val => val.message);
+      
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: errorMessages
+      });
+    }
+    console.log("error in updateProfile controller",error);
     res.status(500).json({error:"internal server error"});
   }
 }
