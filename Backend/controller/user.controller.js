@@ -5,6 +5,7 @@ import crypto from 'crypto'
 import User from "../model/user.model.js"
 import { generateTokenAndSetCookies } from '../utils/generateTokenAndSetCookies.js';
 import { sendForgetPasswordEmail, sendPasswordResetSuccessEmail, sendPasswordUpdateSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
+import cloudinary from '../utils/Cloudinary.js';
 
 export const createUser = async (req, res) => {
  try{
@@ -211,6 +212,7 @@ export const updateProfile=async(req,res)=>{
       res.status(400).json({error:"atleast one field required"});
       return;
     }
+    let cloudinaryResponse=null;
     const user=await User.findById(id);
     if(!user){
       res.status(400).json({error:"user not found"});
@@ -227,9 +229,21 @@ export const updateProfile=async(req,res)=>{
         user.password=newHashedPassword;
         await sendPasswordUpdateSuccessEmail(user.email);
       }
+      if(profilePic){
+        try{
+          if(user.profilePic){
+          const publicId=user.profilePic.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(`ProfilePictures/${publicId}`);
+          }
+            cloudinaryResponse= await cloudinary.uploader.upload(profilePic,{folder:'ProfilePictures'});
+        }catch(err){
+            console.log('errror checking image in cloudinary',err.message);
+        }
+      }
+      console.log(cloudinaryResponse.secure_url)
    
     user.name=name || user.name;
-    user.profilePic=profilePic || user.profilePic;
+    user.profilePic=cloudinaryResponse?.secure_url || user.profilePic;
     user.bio=bio || user.bio;
     user.username=username || user.username;
     user.email=email || user.email;
