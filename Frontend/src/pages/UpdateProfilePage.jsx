@@ -63,7 +63,9 @@ export default function UpdateProfilePage({user}) {
             />
             <div className="space-y-1 flex-1 ">
               <h1 className="text-2xl font-bold">Prajwol Shrestha</h1>
-              <input type="file" ref={changeProfilePictureRef} onChange={imageInputHandler} size="sm" hidden/><Button type="button" className="place-self-end mt-2 cursor-pointer" onClick={()=>{changeProfilePictureRef.current.click()}}>Change photo</Button>      
+              <input type="file" ref={changeProfilePictureRef} onChange={imageInputHandler} size="sm" hidden/>
+              <Button type="button" className="place-self-end mt-2 cursor-pointer" onClick={()=>{changeProfilePictureRef.current.click()}}>Change photo</Button>      
+              <span className="pl-5">{newProfile.profilePic?"Image Uploaded":""}</span>
             </div>
           </div>
         </header>
