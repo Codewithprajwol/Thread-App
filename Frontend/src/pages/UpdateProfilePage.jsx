@@ -9,33 +9,22 @@ import { Loader } from "lucide-react"
 
 
 export default function UpdateProfilePage({user}) {
-  const {updateProfile,isLoading}=useAuthStore()
+  const {updateProfile,isUpdating}=useAuthStore()
   const [newProfile, setNewProfile] = useState({
-    name:'',
-    username:'',
-    email:'',
-    bio:'',
-    password:'',
-    newPassword:'',
+    name:user?.name,
+    username: user?.username,
+    email:  user?.email,
+    bio: user?.bio,
+    password:'' ,
+    newPassword: '',
     confirmPassword:'',
-    profilePic:''
+    profilePic: user?.profilePic
   })
   const changeProfilePictureRef=useRef(null)
 
   const submitHandler = async (e) => {
     e.preventDefault()
     await updateProfile({...newProfile,id:user._id});
-    setNewProfile({
-      name:'',
-      username:'',
-      email:'',
-      bio:'',
-      password:'',
-      newPassword:'',
-      confirmPassword:'',
-      profilePic:''
-
-    })
   }
 
 
@@ -55,7 +44,7 @@ export default function UpdateProfilePage({user}) {
         <header className="space-y-2">
           <div className="flex items-center space-x-3">
             <img
-              src="/placeholder.svg"
+              src={user?.profilePic || "/placeholder.svg"}
               alt="Avatar"
               width="96"
               height="96"
@@ -63,7 +52,7 @@ export default function UpdateProfilePage({user}) {
               style={{ aspectRatio: "96/96", objectFit: "cover" }}
             />
             <div className="space-y-1 flex-1 ">
-              <h1 className="text-2xl font-bold">Prajwol Shrestha</h1>
+              <h1 className="text-2xl font-bold">{user?.name}</h1>
               <input type="file" ref={changeProfilePictureRef} onChange={imageInputHandler} size="sm" hidden/>
               <Button type="button" className="place-self-end mt-2 cursor-pointer" onClick={()=>{changeProfilePictureRef.current.click()}}>Change photo</Button>      
               <span className="pl-5">{newProfile.profilePic?"Image Uploaded":""}</span>
@@ -113,7 +102,7 @@ export default function UpdateProfilePage({user}) {
           </Card>
         </div>
         <div className="pt-6">
-          <Button type="submit">{isLoading ? (
+          <Button type="submit">{isUpdating ? (
 						<>
 							<Loader className='mr-2 h-5 w-5 animate-spin' aria-hidden='true' />
 							Loading...

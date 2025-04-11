@@ -26,7 +26,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 export default function Signup({setAuthScreenState}) {
 
   // Zustand store for authentication state
-  const {signUp}=useAuthStore();
+  const {signUp,isSigning}=useAuthStore();
   const form = useForm({
     defaultValues: {
       name: '',
@@ -167,8 +167,8 @@ export default function Signup({setAuthScreenState}) {
                 />
 
                 <Button type="submit" className="w-full">
-                  Register
-                </Button>
+                 {isSigning? "Registering...":"Register"}                 
+                 </Button>
               </div>
             </form>
           </Form>

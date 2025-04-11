@@ -7,40 +7,38 @@ export const useAuthStore = create((set) => ({
     setAuthScreenState: (newState) => set({ authScreenState: newState }),
     user: null,
     isLoading: false,
+    isSigning:false,
+    isUpdating:false,
     isAuthenticated: false,
     signUp: async ({ username, email, password, name }) => {
-        set({ isLoading: true });
+        set({ isSigning: true });
         try {
-
             const response = await axios.post('/user/signup', { username, name, email, password });
             if (response.status === 201) {
-                set({ user: response.data.user, isLoading: false });
+                set({ user: response.data.user, isSigning: false });
                 toast.success('Registration successful!')
                 return response.status;
             }
         } catch (error) { 
             console.error("Error in signup:", error);
-            set({ isLoading: false });
+            set({ isSigning: false });
             toast.error(error.response.data.errors?.[0] || error.response.data.error || error.response.data.message || "An error occured");  
             return error.response.status;    
          }
         },
     logIn: async ({ emailOrUsername, password }) => {
-        set({ isLoading: true });
         try {
             const response = await axios.post('/user/login', { emailOrUsername, password });
             if (response.status === 200) {
-                set({ user: response.data.user, isLoading: false });
+                set({ user: response.data.user });
                 toast.success('Login successful!')
             }
         } catch (error) {
             console.error("Error in login:", error);
-            set({ isLoading: false });
             toast.error(error.response.data.error|| "An error occured");
         }
     },
     forgetPassword: async ({ email }) => {
-        set({ isLoading: true });
         try {
             const response = await axios.post('/user/forget-password', { email });
             if (response.status === 200) {
@@ -49,25 +47,22 @@ export const useAuthStore = create((set) => ({
             }
         } catch (error) {
             console.error("Error in forget password:", error);
-            set({ isLoading: false });
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
     },
     VerifyEmail:async({code})=>{
-        set({isLoading:true});
+        
         try{
             const response=await axios.post('/user/verify-email',{code});
             if(response.status===200){
-                set({isLoading:false});
                 toast.success(response.data.message || "Email verified successfully!")
             }
         }catch(error){
             console.error("Error in email verification:",error);
-            set({isLoading:false});
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }   
     },
-    LogOut:async()=>{
+    logOut:async()=>{
         try{
             const response=await axios.post('/user/logout');
         if(response.status===200){
@@ -92,43 +87,37 @@ export const useAuthStore = create((set) => ({
         }
     },
     resetPassword:async({newPassword,token})=>{
-        set({isLoading:true});
         try{
             const response=await axios.post(`/user/reset-password/${token}`, {newPassword});
             if(response.status===200){
-                set({isLoading:false});
                 toast.success(response.data.message || "Password reset successfully!")
             }
         }catch(error){
             console.error("Error in password reset:",error);
-            set({isLoading:false});
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
     },
     updateProfile:async({id,name,profilePic,bio,username,email, password,newPassword})=>{
-        set({isLoading:true});
+        set({isUpdating:true});
         try{
             const response=await axios.post(`/user/updateprofile/${id}`,{username,name,profilePic,bio,password,newPassword,email});
             if(response.status===200){
-                set({isLoading:false});
+                set({user:response.data.user,isUpdating:false});
                 toast.success(response.data.message || "Profile updated successfully!")
             }
         }catch(error){
             console.error("Error in updating profile:",error);
-            set({isLoading:false});
+            set({isUpdating:false});
             toast.error(error.response.data.errors?.[0] || error.response.data.error || error.response.data.message || "An error occured");       }
     },
     followUnfollow:async({id})=>{
-        set({isLoading:true});
         try{
             const response=await axios.post(`/user/follow/${id}`);
             if(response.status===200){
-                set({isLoading:false});
                 toast.success(response.data.message || "Follow/Unfollow action successful!")
             }
         }catch(error){
             console.error("Error in follow/unfollow:",error);
-            set({isLoading:false});
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
     }

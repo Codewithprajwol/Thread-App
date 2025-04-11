@@ -280,7 +280,9 @@ export const updateProfile=async(req,res)=>{
     user.username=username || user.username;
     user.email=email || user.email;
     await user.save();
-    res.status(200).json({message:"profile updated successfully"});
+    const data=user._doc;
+    delete data.password;
+    res.status(200).json({message:"profile updated successfully",user:data});
 
   }catch(error){
     if (error.name === 'ValidationError') {
