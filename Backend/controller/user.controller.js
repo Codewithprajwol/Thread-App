@@ -15,6 +15,18 @@ export const createUser = async (req, res) => {
     res.status(400).json({ error: "All field are required " });
     return;
   }
+  if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)===false){
+    res.status(400).json({error:"Invalid Email"});
+    return
+  }
+  if(password.length<6 && password.length>12){
+    res.status(400).json({error:"Password should be between 6 to 20 characters"});
+    return
+  }
+  if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)===false){
+    res.status(400).json({error:"Password should contain atleast one uppercase letter,one lowercase letter,one special character and one number"});
+    return
+  }
   const existingNickName=await User.findOne({username})
   if(existingNickName){
       res.status(400).json({error:"nick name Already Exists"});
@@ -44,6 +56,15 @@ export const createUser = async (req, res) => {
   res.status(201).json({user:{...user._doc,password:undefined}})
 
  }catch(err){
+  if (error.name === 'ValidationError') {
+    const errorMessages = Object.values(error.errors).map(val => val.message);
+    
+    return res.status(400).json({
+      success: false,
+      message: 'Validation failed',
+      errors: errorMessages
+    });
+  }
   console.log("error in signup controller",err.message);
   res.status(500).json({error:"internal Server Error"});
  }
@@ -207,6 +228,7 @@ export const updateProfile=async(req,res)=>{
   try{
     const {id}=req.params;
     const {name,profilePic,bio,username,password,newPassword,email}=req.body;
+    console.log(password)
     if(!name && !profilePic && !bio && !username && !password && !newPassword  &&!email){
       res.status(400).json({error:"atleast one field required"});
       return;
@@ -217,7 +239,19 @@ export const updateProfile=async(req,res)=>{
       res.status(400).json({error:"user not found"});
       return;
     }
-    if(password && newPassword){
+    if(email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)===false){
+      res.status(400).json({error:"Invalid Email"});
+      return
+    }
+    if(newPassword && newPassword.length<6 && newPassword.length>12){
+      res.status(400).json({error:"Password should be between 6 to 20 characters"});
+      return
+    }
+    if(newPassword && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)===false){
+      res.status(400).json({error:"Password should contain atleast one uppercase letter,one lowercase letter,one special character and one number"});
+      return
+    }
+    if(password || newPassword){
         const validPassword=await bcrypt.compare(password,user.password);
         if(!validPassword){
           res.status(400).json({error:"Invalid Password"});

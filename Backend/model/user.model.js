@@ -17,22 +17,10 @@ const userSchema=new mongoose.Schema({
         unique:true,
         lowercase:true,
         trim:true,
-        validate:{
-            validator:function(v){
-                return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v);
-            },
-            message:"Please enter a valid email address"
-        }
     },
     password:{
         type:String,
         minLength:[6,"Password should be at least 6 characters long"],
-        validate:{
-            validator:function(v){
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(v);
-            },
-            message:"Password should contain at least one uppercase letter, one lowercase letter, and one number"
-        }
     },
     following:{
         type:[String],

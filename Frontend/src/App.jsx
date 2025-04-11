@@ -2,7 +2,7 @@ import Header from "@/components/Header"
 import { Navigate, Route, Routes } from "react-router-dom"
 import UserPage from "./pages/UserPage"
 import PostPage from "./pages/PostPage"
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "react-hot-toast"
 import AuthPage from "./pages/AuthPage"
 import EmailVerificationPage from "./pages/EmailVerificationPage"
 import ResetPasswordPage from "./pages/ResetPasswordPage"
@@ -14,13 +14,17 @@ import UpdateProfilePage from "./pages/UpdateProfilePage"
 
 function App() {
   const {checkAuth,user,isLoading}=useAuthStore();
+  console.log(isLoading);
   useEffect(()=>{
     checkAuth();
   },[])
-  
-  if(isLoading && !user){
-   return <h1 className="text-center text-3xl text-bold">loading....</h1>
-    
+
+  if(isLoading){
+    return (
+      <div className="flex items-center justify-center h-screen">
+         <h1>loading...</h1>
+    </div>
+    )
   }
   return (
     <div className="max-w-[600px] mx-auto py-4 px-2">

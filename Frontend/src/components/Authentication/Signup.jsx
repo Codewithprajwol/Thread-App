@@ -26,7 +26,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 export default function Signup({setAuthScreenState}) {
 
   // Zustand store for authentication state
-  const {signUp, isLoading}=useAuthStore();
+  const {signUp}=useAuthStore();
   const form = useForm({
     defaultValues: {
       name: '',
@@ -44,13 +44,16 @@ export default function Signup({setAuthScreenState}) {
         toast.error("Passwords do not match")
         return
       }
-        await signUp({
+        const response=await signUp({
           username:values.username,
           name:values.name,
           email: values.email,
           password: values.password,
         })
+        console.log(response)
+        if(response===201){
         form.reset();
+        }
     } catch (error) {
       console.error('Form submission error', error)
       toast.error('Failed to submit the form. Please try again.')

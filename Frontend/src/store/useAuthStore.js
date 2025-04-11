@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+import { toast } from 'react-hot-toast';
 import axios from '../lib/axios'
 import { create } from 'zustand';
 
@@ -16,13 +16,15 @@ export const useAuthStore = create((set) => ({
             if (response.status === 201) {
                 set({ user: response.data.user, isLoading: false });
                 toast.success('Registration successful!')
+                return response.status;
             }
-        } catch (error) {
+        } catch (error) { 
             console.error("Error in signup:", error);
             set({ isLoading: false });
-            toast.error(error.response.data.error || error.response.data.message || "An error occured");
-        }
-    },
+            toast.error(error.response.data.errors?.[0] || error.response.data.error || error.response.data.message || "An error occured");  
+            return error.response.status;    
+         }
+        },
     logIn: async ({ emailOrUsername, password }) => {
         set({ isLoading: true });
         try {
@@ -34,7 +36,7 @@ export const useAuthStore = create((set) => ({
         } catch (error) {
             console.error("Error in login:", error);
             set({ isLoading: false });
-            toast.error(error.response.data.errors[0]|| "An error occured");
+            toast.error(error.response.data.error|| "An error occured");
         }
     },
     forgetPassword: async ({ email }) => {
@@ -114,8 +116,7 @@ export const useAuthStore = create((set) => ({
         }catch(error){
             console.error("Error in updating profile:",error);
             set({isLoading:false});
-            toast.error(error.response.data.errors[0] || error.response.data.message || "An error occured",id="profile-update-error");
-        }
+            toast.error(error.response.data.errors?.[0] || error.response.data.error || error.response.data.message || "An error occured");       }
     },
     followUnfollow:async({id})=>{
         set({isLoading:true});
