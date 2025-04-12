@@ -132,7 +132,7 @@ export const useAuthStore = create((set) => ({
         }catch(error){
             console.error("Error in getting profile:",error);
             set({isGetProfileLoading:false});
-            toast.error(error.response.data.error || error.response.data.message || "An error occured");
+            toast.error("An error occured");
         }
     }
 

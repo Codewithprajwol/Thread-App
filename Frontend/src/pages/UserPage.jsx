@@ -8,10 +8,12 @@ import { useParams } from 'react-router-dom'
 const UserPage = () => {
      const {getProfile,isGetProfileLoading,user}=useAuthStore();
      const username=useParams();
-     
+
      useEffect(()=>{
       getProfile(username);
      },[getProfile])
+
+     console.log(user)
 
   if(isGetProfileLoading){
     return (
@@ -19,6 +21,9 @@ const UserPage = () => {
         <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />
       </div>
     )
+  }
+  if(!user){
+     return (<div>user not found  </div>)
   }
   return (
     <>

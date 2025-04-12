@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 const UserHeader = ({user}) => {
-  console.log(user)
   return (
     <>
     <div className='w-full flex items-center justify-between mt-2'>
@@ -16,11 +15,11 @@ const UserHeader = ({user}) => {
             <h6 className='bg-gray-500/40 px-1 rounded-sm text-hello text-[.9rem]'>thread.net</h6>
             </div>
         </div>
-    <img src={user?.profilePic} alt='Profile' className='w-16 h-16 rounded-full'/>
+    <img src={user?.profilePic || "/placeholder.svg"} alt='Profile' className='w-16 h-16 rounded-full'/>
     </div>
-    <p className='mt-3 text-sm'>{user.bio}</p>
+    <p className='mt-3 text-sm'>{user?.bio}</p>
     <div className='flex items-center justify-between mt-2'>
-        {/* <h6 className='text-blue-300'>{user?.follower.length}{user.follower.length>=1000?Math.round(user.follower.count/1000)+"  k" :""} followers . instagram.com</h6> */}
+        <h6 className='text-blue-300'>{user?.follower?.length}{user?.follower?.length>=1000?Math.round(user.follower.count/1000)+"  k" :""} followers . instagram.com</h6>
         <div className='flex items-center justify-start gap-2'>
             <Instagram/>
             <ThreeDotUserHeader/>
@@ -31,8 +30,6 @@ const UserHeader = ({user}) => {
     <TabsTrigger value="account"  >Threads</TabsTrigger>
     <TabsTrigger value="password" >Replies</TabsTrigger>
   </TabsList>
-  {/* <TabsContent value="account">Make changes to your account here.</TabsContent>
-  <TabsContent value="password">Change your password here.</TabsContent> */}
 </Tabs>
 
     </>

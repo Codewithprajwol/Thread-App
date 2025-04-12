@@ -27,7 +27,7 @@ export const createUser = async (req, res) => {
     res.status(400).json({error:"Password should contain atleast one uppercase letter,one lowercase letter,one special character and one number"});
     return
   }
-  const existingNickName=await User.findOne({username})
+  const existingNickName=await User.findOne({username:{$regex:`^${username}$`,$options:'i'}});
   if(existingNickName){
       res.status(400).json({error:"nick name Already Exists"});
       return
@@ -301,8 +301,10 @@ export const updateProfile=async(req,res)=>{
 
 export const getUserProfile=async(req,res)=>{
       const {username}=req.params;
+      console.log(username)
      try{
-      const user=await User.findOne({name:username});
+      const user=await User.findOne({username}).select("-password");
+      console.log(user);
       if(!user){
         res.status(400).json({error:"user not found"});
         return;

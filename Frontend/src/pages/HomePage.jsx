@@ -3,7 +3,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const HomePage = ({user}) => {
-  console.log(user);
   const logOut=useAuthStore((state)=>state.logOut);
   return (
     <div className='text-center min-h-32 text-bold'>
