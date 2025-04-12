@@ -123,7 +123,7 @@ export const useAuthStore = create((set) => ({
         }
     },
     getProfile:async({username})=>{
-        set({isGetProfileLoading:true});
+    set({isGetProfileLoading:true});
         try{
             const response=await axios.get(`/user/profile/${username}`);
             if(response.status===200){

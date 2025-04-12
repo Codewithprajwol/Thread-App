@@ -1,9 +1,25 @@
 import UserHeader from '@/components/UserHeader'
 import UserPost from '@/components/UserPost'
-import React from 'react'
+import { useAuthStore } from '@/store/useAuthStore'
+import { Loader } from 'lucide-react'
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 const UserPage = () => {
-  
+     const {getProfile,isGetProfileLoading,user}=useAuthStore();
+     const username=useParams();
+     
+     useEffect(()=>{
+      getProfile(username);
+     },[getProfile])
+
+  if(isGetProfileLoading){
+    return (
+      <div className='flex items-center justify-center h-screen'>
+        <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />
+      </div>
+    )
+  }
   return (
     <>
     <UserHeader user={user}/>

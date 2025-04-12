@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 const UserHeader = ({user}) => {
-  console.log(user.follower.length)
+  console.log(user)
   return (
     <>
     <div className='w-full flex items-center justify-between mt-2'>
@@ -20,7 +20,7 @@ const UserHeader = ({user}) => {
     </div>
     <p className='mt-3 text-sm'>{user.bio}</p>
     <div className='flex items-center justify-between mt-2'>
-        <h6 className='text-blue-300'>{user?.follower.length}{user.follower.length>=1000?Math.round(user.follower.count/1000)+"  k" :""} followers . instagram.com</h6>
+        {/* <h6 className='text-blue-300'>{user?.follower.length}{user.follower.length>=1000?Math.round(user.follower.count/1000)+"  k" :""} followers . instagram.com</h6> */}
         <div className='flex items-center justify-start gap-2'>
             <Instagram/>
             <ThreeDotUserHeader/>

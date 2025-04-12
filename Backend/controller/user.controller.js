@@ -55,7 +55,7 @@ export const createUser = async (req, res) => {
    await sendVerificationEmail(user.email,verificationToken);
   res.status(201).json({user:{...user._doc,password:undefined}})
 
- }catch(err){
+ }catch(error){
   if (error.name === 'ValidationError') {
     const errorMessages = Object.values(error.errors).map(val => val.message);
     
@@ -302,7 +302,7 @@ export const updateProfile=async(req,res)=>{
 export const getUserProfile=async(req,res)=>{
       const {username}=req.params;
      try{
-      const user=await User.find({username});
+      const user=await User.findOne({name:username});
       if(!user){
         res.status(400).json({error:"user not found"});
         return;
