@@ -10,6 +10,7 @@ export const useAuthStore = create((set) => ({
     isSigning:false,
     isUpdating:false,
     isAuthenticated: false,
+    isGetProfileLoading:false,
     signUp: async ({ username, email, password, name }) => {
         set({ isSigning: true });
         try {
@@ -118,6 +119,19 @@ export const useAuthStore = create((set) => ({
             }
         }catch(error){
             console.error("Error in follow/unfollow:",error);
+            toast.error(error.response.data.error || error.response.data.message || "An error occured");
+        }
+    },
+    getProfile:async({username})=>{
+        set({isGetProfileLoading:true});
+        try{
+            const response=await axios.get(`/user/profile/${username}`);
+            if(response.status===200){
+                set({user:response.data.user,isGetProfileLoading:false});
+            }
+        }catch(error){
+            console.error("Error in getting profile:",error);
+            set({isGetProfileLoading:false});
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
     }

@@ -31,7 +31,7 @@ function App() {
     <div className="max-w-[600px] mx-auto py-4 px-2">
       <Header />
       <Routes>
-        <Route path="/" element={user?<HomePage />:<Navigate to='/auth'/>} />
+        <Route path="/" element={user?<HomePage user={user} />:<Navigate to='/auth'/>} />
         <Route path="/auth" element={user?<Navigate to='/'/>:<AuthPage />} />
         <Route path="/:username" element={user?<UserPage/>:<Navigate to='/auth'/>} />
         <Route path="/:username/post/:id" element={<PostPage/>} />

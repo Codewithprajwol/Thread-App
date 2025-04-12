@@ -298,3 +298,19 @@ export const updateProfile=async(req,res)=>{
     res.status(500).json({error:"internal server error"});
   }
 }
+
+export const getUserProfile=async(req,res)=>{
+      const {username}=req.params;
+     try{
+      const user=await User.find({username});
+      if(!user){
+        res.status(400).json({error:"user not found"});
+        return;
+      }
+      res.status(200).json({user:user});
+
+     }catch(error){
+      console.log("error in getUserProfile controller",error.message);
+      res.status(500).json({error:"internal server error"});
+     }
+}
