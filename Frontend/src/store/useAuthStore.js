@@ -6,11 +6,13 @@ export const useAuthStore = create((set) => ({
     authScreenState: 'login',
     setAuthScreenState: (newState) => set({ authScreenState: newState }),
     user: null,
+    profileUser:null,
     isLoading: false,
     isSigning:false,
     isUpdating:false,
     isAuthenticated: false,
     isGetProfileLoading:false,
+    hasFetchedProfile: false,
     signUp: async ({ username, email, password, name }) => {
         set({ isSigning: true });
         try {
@@ -112,9 +114,14 @@ export const useAuthStore = create((set) => ({
             toast.error(error.response.data.errors?.[0] || error.response.data.error || error.response.data.message || "An error occured");       }
     },
     followUnfollow:async({id})=>{
+        console.log("follow unfollow called with Id", id)
         try{
             const response=await axios.post(`/user/follow/${id}`);
             if(response.status===200){
+                set({user:response.data.user,profileUser:response.data.userToFollow})
+                console.log("Updated Zustand state");
+                console.log("user =>", response.data.user);
+                console.log("profileUser =>", response.data.userToFollow);
                 toast.success(response.data.message || "Follow/Unfollow action successful!")
             }
         }catch(error){
@@ -127,11 +134,11 @@ export const useAuthStore = create((set) => ({
         try{
             const response=await axios.get(`/user/profile/${username}`);
             if(response.status===200){
-                set({user:response.data.user,isGetProfileLoading:false});
+                set({profileUser:response.data.user,isGetProfileLoading:false,hasFetchedProfile: true});
             }
         }catch(error){
             console.error("Error in getting profile:",error);
-            set({isGetProfileLoading:false});
+            set({isGetProfileLoading:false,hasFetchedProfile: true});
             toast.error("An error occured");
         }
     }

@@ -196,7 +196,7 @@ export const followUnfollowUser=async(req,res)=>{
   try{
     const user=req.user;
     const {id}=req.params;
-    const userToFollow=await User.findById(id);
+    const userToFollow=await User.findById(id).select("-password");
     if(!userToFollow){
       res.status(400).json({error:"user not found"});
       return;
@@ -205,19 +205,26 @@ export const followUnfollowUser=async(req,res)=>{
       res.status(400).json({error:"you can't follow/unfollow yourself"});
       return;
     }
-
-    if(user.following.includes(id)){
+   const isFollowing=user.following.includes(id);
+    if(isFollowing){
      //unfollow
      await User.findByIdAndUpdate(user._id,{$pull:{following:id}});
      await User.findByIdAndUpdate(id,{$pull:{follower:user._id}});
-     res.status(200).json({message:"unfollowed successfully"});
     }else{
       //follow
       await User.findByIdAndUpdate(user._id,{$push:{following:id}});
       await User.findByIdAndUpdate(id,{$push:{follower:user._id}});
-      res.status(200).json({message:"followed successfully"});
     }
-    
+    const updatedUser = await User.findById(user._id).select("-password");
+    const updatedUserToFollow = await User.findById(id).select("-password");
+
+    res.status(200).json({
+      message: isFollowing
+        ? "Unfollowed successfully"
+        : "Followed successfully",
+      user: updatedUser,
+      userToFollow: updatedUserToFollow,
+    });    
   }catch(error){
     console.log("error in followUnfollowUser controller",error.message);
     res.status(500).json({error:"internal server error"});
@@ -301,10 +308,8 @@ export const updateProfile=async(req,res)=>{
 
 export const getUserProfile=async(req,res)=>{
       const {username}=req.params;
-      console.log(username)
      try{
-      const user=await User.findOne({username}).select("-password");
-      console.log(user);
+      const user=await User.findOne({username:{$regex:`^${username}$`,$options:'i'}}).select("-password");
       if(!user){
         res.status(400).json({error:"user not found"});
         return;
