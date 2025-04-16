@@ -10,8 +10,6 @@ import { useAuthStore } from '@/store/useAuthStore'
 const UserHeader = () => {
   const user=useAuthStore((state)=>state.profileUser);
   const currentUser=useAuthStore((state)=>state.user);  
-  // console.log(user,currentUser)
-  // console.log('hi')
 
      const navigate=useNavigate() 
      const {followUnfollow}=useAuthStore()

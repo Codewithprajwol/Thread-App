@@ -3,7 +3,7 @@ import DarkMode from '/DarkLogo.svg'
 import LightMode from '/light-logo.svg'
 import { useTheme } from './ThemeProvider'
 
-const Header = () => {
+const   Header = () => {
   const [darkMode, setDarkMode] = useState("dark")
   const { setTheme } = useTheme()
 

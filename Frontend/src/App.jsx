@@ -12,6 +12,8 @@ import { useEffect } from "react"
 import HomePage from "./pages/HomePage"
 import UpdateProfilePage from "./pages/UpdateProfilePage"
 import { Loader } from "lucide-react"
+import Logout from "./components/Logout"
+import CreatePost from "./components/CreatePost"
 
 function App() {
   const {checkAuth,user,isLoading}=useAuthStore();
@@ -28,6 +30,7 @@ function App() {
   }
 
   return (
+    <div className="w-full min-h-[100vh]">
     <div className="max-w-[600px] mx-auto py-4 px-2">
       <Header />
       <Routes>
@@ -41,6 +44,8 @@ function App() {
         <Route path="/updateProfile" element={<UpdateProfilePage user={user}/>}/>
       </Routes>
         <Toaster/>
+    </div>
+   {user && <CreatePost/>}
     </div>
   )
 }

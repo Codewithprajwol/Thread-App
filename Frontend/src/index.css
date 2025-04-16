@@ -126,3 +126,12 @@
     @apply bg-background text-foreground;
   } 
 }
+
+.post-dialog::-webkit-scrollbar{
+  display:none;
+}
+
+/* .post-dialog{
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-background);
+} */
