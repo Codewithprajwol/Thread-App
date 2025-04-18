@@ -36,7 +36,7 @@ function App() {
       <Routes>
         <Route path="/" element={user?<HomePage user={user} />:<Navigate to='/auth'/>} />
         <Route path="/auth" element={user?<Navigate to='/'/>:<AuthPage />} />
-        <Route path="/:username" element={<UserPage/>} />
+        <Route path="/:username" element={user?<UserPage/>:<Navigate to='/auth'/>} />
         <Route path="/:username/post/:id" element={<PostPage/>} />
         <Route path="/verify-email" element={<EmailVerificationPage/>}/>
         <Route path="/forget-password" element={<ForgetPasswordPage/>}/>

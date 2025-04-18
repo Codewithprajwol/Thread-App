@@ -1,11 +1,12 @@
 import Post from "../model/post.model.js";
 import User from "../model/user.model.js";
+import cloudinary from "../utils/Cloudinary.js";
 
 export const createPost=async(req,res)=>{
     const {text,image,postedBy}=req.body;
     try{
-        if(!postedBy || !text){
-            res.status(400).json({error:"postedBy and text is required"})
+        if(!text){
+            res.status(400).json({error:"text is required"})
             return
         }
         const user=await User.findById(postedBy);
@@ -22,10 +23,19 @@ export const createPost=async(req,res)=>{
             res.status(400).json({error:"text should be less than 500 characters"})
             return;
         }
+
+        let cloudinaryResponse=null;
+        if(image){
+            try{
+                cloudinaryResponse=await cloudinary.uploader.upload(image,{folder:'postImages'})
+            }catch(err){
+                console.log('errror checking image in cloudinary',err.message);
+            }
+        }
         const post= new Post({
             postedBy:postedBy,
             text:text,
-            image:image, 
+            image:cloudinaryResponse?.secure_url || "", 
         })
 
         await post.save();

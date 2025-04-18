@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 const Logout = () => {
   const logOut=useAuthStore((state)=>state.logOut);
   return (
-    <Button className='cursor-pointer' onClick={()=>{logOut()}}><LogOut className='size-4.5'/></Button>
+    <LogOut className='cursor-pointer size-5' onClick={()=>{logOut()}}/>
   ) 
 }
 
