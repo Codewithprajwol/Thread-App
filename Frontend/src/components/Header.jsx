@@ -23,12 +23,12 @@ const uiSituation=localStorage.getItem('vite-ui-theme');
     }
   }
   return (
-    <div className='w-full flex items-center justify-between cursor-pointer'>
+    <div className={`w-full flex items-center ${user?'justify-between':'justify-center'} cursor-pointer`}>
         {user && <Link to="/"><HomeIcon className='size-5'/></Link>} 
         <img onClick={toggleDarkMode} src={ darkMode=="dark"?uiSituation=="light"?DarkMode: LightMode:DarkMode} alt='Dark Mode' className='w-7 h-7 '/>
         <div className='flex items-center justify-between gap-3'>
-         <Link to={`/${user?.username}`}><User className='size-5'/></Link>
-         <Logout/>
+         {user && <Link to={`/${user?.username}`} onClick={()=>console.log('clicked')}><User className='size-5'/></Link>}
+         {user && <Logout/>}
         </div>
     </div>
   )

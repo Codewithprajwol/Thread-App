@@ -1,13 +1,12 @@
 import { Loader, PlusIcon, X } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from './ui/button'
 import {motion} from 'framer-motion'
 
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
+    DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
@@ -24,35 +23,39 @@ const CreatePost = () => {
   const [characterValue,setCharacterValue]=useState(0);
   const [open,setOpen]=useState(false);
   const [textData,setTextData]=useState("");
-  const {createUserPost,isPosting}=usePostStore();
+  const {createUserPost,isPosting,isPostingSuccess}=usePostStore();
+  const prevIsPosting=useRef(false);
   const user=useAuthStore((state)=>state.user);
     const fileInputRef = React.useRef(null);
     const {handlePreviewImage,imageUrl,setImageUrl}=usePreviewImage();
+
     const handleInput=(e)=>{
-       setTextData(e.target.value);
-      if(textData.length>MAX_CHAR){
-        e.target.value=textData.slice(0,MAX_CHAR);
+      const value=e.target.value;
+       setTextData(value);
+      if(value.length>MAX_CHAR){
+        e.target.value=value.slice(0,MAX_CHAR);
           toast.error("Maximum character limit reached", {
             id: "max-char-error"
           });
           return;
       }
-      setCharacterValue(textData.length);
+      setCharacterValue(value.length);
     }
 
-    const handlePostSubmit=(e)=>{
+    const handlePostSubmit=async(e)=>{
       e.preventDefault();
-      const status=createUserPost({text:textData,image:imageUrl,postedBy:user._id})
+      const status=await createUserPost({text:textData,image:imageUrl,postedBy:user._id})
       if(status===200){
       setTextData("");
       setImageUrl(""); 
+      setCharacterValue(0);
       }
     }
     useEffect(()=>{
-      console.log('he')
-      if(!isPosting){
+      if(prevIsPosting.current && !isPosting && isPostingSuccess){
         setOpen(false)
       }
+      prevIsPosting.current=isPosting;
     },[isPosting])
 
   return (

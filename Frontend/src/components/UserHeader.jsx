@@ -28,7 +28,7 @@ const UserHeader = () => {
             <h6 className='bg-gray-500/40 px-1 rounded-sm text-hello text-[.9rem]'>thread.net</h6>
             </div>
         </div>
-    <img src={user?.profilePic || "/placeholder.svg"} alt='Profile' className='w-16 h-16 rounded-full'/>
+    <img src={user?.profilePic || "/placeholder.svg"} alt='Profile' className='w-16 h-16 rounded-full object-cover object-top'/>
     </div>
     <p className='mt-3 text-sm'>{user?.bio}</p>
     <div className='flex items-center justify-between mt-2'>

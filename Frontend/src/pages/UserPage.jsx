@@ -11,10 +11,10 @@ const UserPage = () => {
 
      useEffect(()=>{
       getProfile(username);
-     },[getProfile])
+     },[username.username,getProfile])
 
 
-  if(isGetProfileLoading ){
+  if(isGetProfileLoading){
     return (
       <div className='flex items-center justify-center h-screen'>
         <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />

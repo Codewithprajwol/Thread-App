@@ -7,7 +7,6 @@ export const useAuthStore = create((set) => ({
     setAuthScreenState: (newState) => set({ authScreenState: newState }),
     user: null,
     profileUser:null,
-    isLoading: false,
     isSigning:false,
     isUpdating:false,
     isAuthenticated: false,
@@ -82,11 +81,11 @@ export const useAuthStore = create((set) => ({
         try {
             const response = await axios.post('/user/checkauth');
             if (response.status === 200) {
-                set({ user: response.data.user, isAuthenticated: true, isLoading: false });
+                set({ user: response.data.user, isAuthenticated: true});
             }
         } catch (error) {
             console.error("Error in checking auth:", error);
-            set({ isLoading: false });
+            set({ user:null, isAuthenticated:true});
         }
     },
     resetPassword:async({newPassword,token})=>{
