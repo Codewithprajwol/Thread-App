@@ -13,14 +13,12 @@ import HomePage from "./pages/HomePage"
 import UpdateProfilePage from "./pages/UpdateProfilePage"
 import { Loader } from "lucide-react"
 import CreatePost from "./components/CreatePost"
-import TestPage from "./pages/TestPage"
 
 function App() {
   const {checkAuth,user,isAuthenticated}=useAuthStore();
   useEffect(()=>{
     checkAuth();
   },[checkAuth])
-  console.log("i am here");
 
   if(!isAuthenticated){
     return (
@@ -38,8 +36,6 @@ function App() {
         <Route path="/" element={user?<HomePage user={user} />:<Navigate to='/auth'/>} />
         <Route path="/auth" element={user?<Navigate to='/'/>:<AuthPage />} />
         <Route path="/:username" element={user ?<UserPage/>:<Navigate to='/auth'/>} />
-        {/* <Route path="/:username" element={<TestPage user={user} />} /> */}
-        {/* <Route path="/:username" element={<UserPage/>} /> */}
         <Route path="/:username/post/:id" element={user?<PostPage/>:<Navigate to='/auth'/>} />
         <Route path="/verify-email" element={<EmailVerificationPage/>}/>
         <Route path="/forget-password" element={<ForgetPasswordPage/>}/>

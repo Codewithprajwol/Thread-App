@@ -118,7 +118,6 @@ export const verifyEmail=async(req,res)=>{
     const {code}=req.body;
     const user=await User.findOne({'verificationToken':code,'verificationTokenExpiresAt':{$gt:new Date()}});
     if(!user) return res.status(400).json({error:'Token has be expired ..invalid'});
-    console.log(user)
     user.isVerified=true;
     user.verificationToken=undefined;
     user.verificationTokenExpiresAt=undefined;

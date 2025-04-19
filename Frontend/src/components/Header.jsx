@@ -27,7 +27,7 @@ const uiSituation=localStorage.getItem('vite-ui-theme');
         {user && <Link to="/"><HomeIcon className='size-5'/></Link>} 
         <img onClick={toggleDarkMode} src={ darkMode=="dark"?uiSituation=="light"?DarkMode: LightMode:DarkMode} alt='Dark Mode' className='w-7 h-7 '/>
         <div className='flex items-center justify-between gap-3'>
-         {user && <Link to={`/${user?.username}`} onClick={()=>console.log('clicked')}><User className='size-5'/></Link>}
+         {user && <Link to={`/${user?.username}`}><User className='size-5'/></Link>}
          {user && <Logout/>}
         </div>
     </div>
