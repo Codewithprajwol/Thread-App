@@ -1,14 +1,22 @@
 import Logout from '@/components/Logout';
-import React from 'react'
-import { Link } from 'react-router-dom'
+import Post from '@/components/Post';
+import { usePostStore } from '@/store/userPostStore';
+import { Loader } from 'lucide-react';
+import React, { useEffect } from 'react'
 
-const HomePage = ({user}) => {
+const HomePage = () => {
+  const {isFeedPostFetched,feedPost,feedPosts}=usePostStore();
+   
+  useEffect(()=>{
+      feedPost()
+    },[feedPost])
+
   return (
-    <div className='text-center min-h-32 text-bold'>
-        <h1 className='mb-2'>HomePage</h1>
-        <Link to={`/${user.username}`} className='border-1 bg-gray-500 border-black text-white py-1 px-3 rounded-md'>View Profile Page</Link>
-        <Logout/>
-        <Link to={'/yamu'}>mylove</Link>
+    <div className='h-screen w-full'>
+       
+        {isFeedPostFetched?feedPosts.length===0?<h1 className='text-center pt-4'>Follow SomeOne to see the feed Posts</h1>:feedPosts.map((post)=><Post key={post._id} post={post}/>):( <div className="flex items-center justify-center h-screen">
+        <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />
+   </div>)}
       </div>
   )
 }

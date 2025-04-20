@@ -5,7 +5,9 @@ import {create} from 'zustand'
 export const usePostStore=create((set,get)=>(
     {
         posts:[],
+        feedPosts:[],
         isPosting:false,
+        isFeedPostFetched:false,
         isPostingSuccess:false,
         createUserPost:async({text,image,postedBy})=>{
             set({isPosting:true})
@@ -23,6 +25,20 @@ export const usePostStore=create((set,get)=>(
                 return err.response.status;
             }
         },
+        feedPost:async()=>{
+            try{
+                const response=await axios.get('/post/feedPosts');
+                if(response.status===200){
+                    console.log(response);
+                    set({feedPosts:response.data.posts,isFeedPostFetched:true})
+                }
+
+            }catch(error){
+                console.error("Error in feedPost:",error);
+                set({isFeedPostFetched:true})
+                toast.error(error.response.data.error||"An error occured")
+            }
+        }
 
     }
 ))
