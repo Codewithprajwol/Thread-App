@@ -29,7 +29,6 @@ export const usePostStore=create((set,get)=>(
             try{
                 const response=await axios.get('/post/feedPosts');
                 if(response.status===200){
-                    console.log(response);
                     set({feedPosts:response.data.posts,isFeedPostFetched:true})
                 }
 

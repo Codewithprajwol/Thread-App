@@ -6,6 +6,7 @@ import User from "../model/user.model.js"
 import { generateTokenAndSetCookies } from '../utils/generateTokenAndSetCookies.js';
 import { sendForgetPasswordEmail, sendPasswordResetSuccessEmail, sendPasswordUpdateSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/email.js';
 import cloudinary from '../utils/Cloudinary.js';
+import mongoose from 'mongoose';
 
 export const createUser = async (req, res) => {
  try{
@@ -306,9 +307,15 @@ export const updateProfile=async(req,res)=>{
 }
 
 export const getUserProfile=async(req,res)=>{
-      const {username}=req.params;
+      const {query}=req.params;
+      console.log(query)
      try{
-      const user=await User.findOne({username:{$regex:`^${username}$`,$options:'i'}}).select("-password");
+      let user;
+      if(mongoose.Types.ObjectId.isValid(query)){
+        user=await User.findOne({_id:query}).select("-password");
+      }else{
+       user=await User.findOne({username:{$regex:`^${query}$`,$options:'i'}}).select("-password");
+      }
       if(!user){
         res.status(400).json({error:"user not found"});
         return;

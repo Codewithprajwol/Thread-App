@@ -15,7 +15,7 @@ router.post('/reset-password/:token',resetPassword)
 
 router.post('/checkauth',protectRoute, validateUser)
 
-router.get('/profile/:username',protectRoute,getUserProfile)
+router.get('/profile/:query',protectRoute,getUserProfile)
 router.post('/follow/:id',protectRoute,followUnfollowUser);
 router.post('/updateprofile/:id',protectRoute,updateProfile);
 export default router;

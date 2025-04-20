@@ -124,11 +124,12 @@ export const useAuthStore = create((set) => ({
             toast.error(error.response.data.error || error.response.data.message || "An error occured");
         }
     },
-    getProfile:async({username})=>{
+    getProfile:async({query})=>{
     set({isGetProfileLoading:true});
         try{
-            const response=await axios.get(`/user/profile/${username}`);
+            const response=await axios.get(`/user/profile/${query}`);
             if(response.status===200){
+                
                 set({profileUser:response.data.user,isGetProfileLoading:false,hasFetchedProfile: true});
             }
         }catch(error){
