@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom'
 const UserPage = () => {
      const {getProfile,profileUser,isGetProfileLoading,hasFetchedProfile}=useAuthStore();
      const query=useParams();
-     console.log(query)
 
      useEffect(()=>{
       getProfile({query:query.username});

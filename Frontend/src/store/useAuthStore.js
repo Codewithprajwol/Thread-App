@@ -77,7 +77,6 @@ export const useAuthStore = create((set) => ({
         }
     },
     checkAuth: async () => {
-        set({ isLoading: true });
         try {
             const response = await axios.post('/user/checkauth');
             if (response.status === 200) {

@@ -26,15 +26,15 @@ export const usePostStore=create((set,get)=>(
             }
         },
         feedPost:async()=>{
+            set({isFeedPostFetched:false})
             try{
                 const response=await axios.get('/post/feedPosts');
                 if(response.status===200){
                     set({feedPosts:response.data.posts,isFeedPostFetched:true})
                 }
-
             }catch(error){
                 console.error("Error in feedPost:",error);
-                set({isFeedPostFetched:true})
+                set({isFeedPostFetched:false})
                 toast.error(error.response.data.error||"An error occured")
             }
         }

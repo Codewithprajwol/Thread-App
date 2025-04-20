@@ -1,12 +1,11 @@
-import Logout from '@/components/Logout';
 import Post from '@/components/Post';
 import { usePostStore } from '@/store/userPostStore';
 import { Loader } from 'lucide-react';
 import React, { useEffect } from 'react'
 
 const HomePage = () => {
-  const {isFeedPostFetched,feedPost,feedPosts}=usePostStore();
-   
+  const {isFeedPostFetched,feedPost,feedPosts,}=usePostStore();
+
   useEffect(()=>{
       feedPost()
     },[feedPost])

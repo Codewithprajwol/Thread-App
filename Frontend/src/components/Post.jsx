@@ -11,7 +11,6 @@ const Post = ({post}) => {
     useEffect(()=>{
         getProfile({query:post.postedBy});
     },[getProfile])
-   console.log(profileUser)
     return (
       <div className='w-full mt-4 flex items-start gap-3 justfiy-between pb-12'>
           <div className='flex flex-col gap-2 items-center justify-start'>
