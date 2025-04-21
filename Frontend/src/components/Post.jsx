@@ -7,15 +7,15 @@ import { useAuthStore } from '@/store/useAuthStore'
 
 const Post = ({post}) => {
     const [liked,setLiked]=useState(false)
-    const {getProfile,profileUser}=useAuthStore();
-    useEffect(()=>{
-        getProfile({query:post.postedBy});
-    },[getProfile])
+    // const {getProfile,profileUser}=useAuthStore();
+    // useEffect(()=>{
+    //     getProfile({query:post.postedBy});
+    // },[getProfile])
     return (
       <div className='w-full mt-4 flex items-start gap-3 justfiy-between pb-12'>
           <div className='flex flex-col gap-2 items-center justify-start'>
               <div className='flex items-center justify-between w-8 h-8 rounded-full overflow-hidden'>
-                  <img src={profileUser?.profilePic} alt={profileUser?.name} className='w-full h-full object-cover' />
+                  <img src={"hi"} alt={"hi"} className='w-full h-full object-cover' />
                   </div>
                   
                   {post.image?<div className=' h-[250px] sm:h-[370px] md:[400px] w-[.1rem] bg-[#c0baba42]'></div>:<div className=' h-[100px] w-[.1rem] bg-[#c0baba42]'></div>}
@@ -38,7 +38,8 @@ const Post = ({post}) => {
           <Link to="/prajwol/post/1" className='flex flex-1 flex-col gap-1'>
               <div className='flex  items-center justify-between'>
                  <div className="flex items-center gap-2">
-                  <h6 className='font-bold'>{profileUser?.name}</h6>
+                  {/* <h6 className='font-bold'>{profileUser?.name}</h6> */}
+                  <h6 className='font-bold'>{"prau"}</h6>
                   <div className='w-7 h-7'><img src="/verified.png" alt="verified logo" /></div>
                  </div>
                  <div className="flex items-center gap-2">

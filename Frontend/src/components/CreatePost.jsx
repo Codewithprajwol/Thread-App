@@ -14,7 +14,7 @@ import { Textarea } from './ui/textarea'
 import { BsFillImageFill } from 'react-icons/bs'
 import usePreviewImage from '@/Hooks/usePreviewImage'
 import toast from 'react-hot-toast'
-import { usePostStore } from '@/store/userPostStore'
+import { usePostStore } from '@/store/usePostStore'
 import { useAuthStore } from '@/store/useAuthStore'
 
 

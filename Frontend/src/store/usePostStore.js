@@ -9,6 +9,8 @@ export const usePostStore=create((set,get)=>(
         isPosting:false,
         isFeedPostFetched:false,
         isPostingSuccess:false,
+        isAllPostFetched:false,
+        allPostError:null,
         createUserPost:async({text,image,postedBy})=>{
             set({isPosting:true})
             try{
@@ -35,6 +37,19 @@ export const usePostStore=create((set,get)=>(
             }catch(error){
                 console.error("Error in feedPost:",error);
                 set({isFeedPostFetched:false})
+                toast.error(error.response.data.error||"An error occured")
+            }
+        },
+        getAllPost:async()=>{
+            set({isAllPostFetched:false,allPostError:null})
+            try{
+                const response=await axios.get('/post/getAllPost');
+                if(response.status===200){
+                    set({posts:response.data.posts,isAllPostFetched:true})
+                }
+            }catch(error){
+                console.error("Error in getAllPost:",error);
+                set({isAllPostFetched:false,allPostError:error.response.data.error||"An error occured"})
                 toast.error(error.response.data.error||"An error occured")
             }
         }

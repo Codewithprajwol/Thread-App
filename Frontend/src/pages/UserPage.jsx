@@ -1,19 +1,33 @@
+import Post from '@/components/Post'
 import UserHeader from '@/components/UserHeader'
-import UserPost from '@/components/UserPost'
+import axiosInstance from '@/lib/axios'
 import { useAuthStore } from '@/store/useAuthStore'
+import { usePostStore } from '@/store/usePostStore'
 import { Loader } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 const UserPage = () => {
      const {getProfile,profileUser,isGetProfileLoading,hasFetchedProfile}=useAuthStore();
+     const {getAllPost,allPostError,isAllPostFetched,posts}=usePostStore();
+     const [userPosts,setUserPosts]=useState([])
      const query=useParams();
 
+     console.log(isAllPostFetched)
+     
      useEffect(()=>{
-      getProfile({query:query.username});
-     },[query.username,getProfile])
-
-
+      console.log("user posts")
+         const getAllPosts=async()=>{
+          const response=await axiosInstance.get('/post/getAllPost');
+          setUserPosts(response.data.posts);
+         }
+         getAllPosts();
+     },[])
+     
+     useEffect(()=>{
+       getProfile({query:query.username});
+      },[query.username])
+      
   if(isGetProfileLoading){
     return (
       <div className='flex items-center justify-center h-screen'>
@@ -27,10 +41,8 @@ const UserPage = () => {
   return (
     <>
     <UserHeader />
-    <UserPost likes={238} replies={435} postImg="/post1.png" postTitle="let's talk about thread."/>
-    <UserPost likes={200} replies={400} postImg="/post2.png" postTitle="nice toturial."/>
-    <UserPost likes={234} replies={453} postImg="/post3.png" postTitle="I love this guy."/>
-    <UserPost likes={234} replies={453}  postTitle="This is my first thread."/>
+    {/* {isAllPostFetched && !allPostError?posts.length===0?<div className='flex items-center justify-center'>No posts Yet</div>:posts.map((post)=><Post key={post._id} post={post}/>):<div className='flex items-center justify-center h-screen'>{allPostError}</div>} */}
+    {userPosts.map((post)=><Post key={post._id} post={post}/>)}
     </>
   )
 }

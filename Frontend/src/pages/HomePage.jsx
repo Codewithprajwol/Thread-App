@@ -1,5 +1,5 @@
 import Post from '@/components/Post';
-import { usePostStore } from '@/store/userPostStore';
+import { usePostStore } from '@/store/usePostStore';
 import { Loader } from 'lucide-react';
 import React, { useEffect } from 'react'
 
