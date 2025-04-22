@@ -4,7 +4,7 @@ import { Loader } from 'lucide-react';
 import React, { useEffect } from 'react'
 
 const HomePage = () => {
-  const {isFeedPostFetched,feedPost,feedPosts,}=usePostStore();
+  const {isFeedPostFetched,feedPost,posts}=usePostStore();
 
   useEffect(()=>{
       feedPost()
@@ -13,7 +13,7 @@ const HomePage = () => {
   return (
     <div className='h-screen w-full'>
        
-        {isFeedPostFetched?feedPosts.length===0?<h1 className='text-center pt-4'>Follow SomeOne to see the feed Posts</h1>:feedPosts.map((post)=><Post key={post._id} post={post}/>):( <div className="flex items-center justify-center h-screen">
+        {isFeedPostFetched?posts.length===0?<h1 className='text-center pt-4'>Follow SomeOne to see the feed Posts</h1>:posts.map((post)=><Post key={post._id} post={post}/>):( <div className="flex items-center justify-center h-screen">
         <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />
    </div>)}
       </div>

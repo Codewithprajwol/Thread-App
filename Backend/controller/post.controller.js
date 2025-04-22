@@ -47,9 +47,10 @@ export const createPost=async(req,res)=>{
 }
 
 
-export const getAllPost=async(req,res)=>{
+export const getAllUserPost=async(req,res)=>{
+    const {id}=req.params;
     try{
-        const posts=await Post.find({postedBy:req.user._id});
+        const posts=await Post.find({postedBy:id}).sort({createdAt:-1});
         if(!posts){
             res.status(400).json({error:"no posts found"})
             return;

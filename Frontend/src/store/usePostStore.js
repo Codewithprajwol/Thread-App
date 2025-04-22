@@ -5,7 +5,6 @@ import {create} from 'zustand'
 export const usePostStore=create((set,get)=>(
     {
         posts:[],
-        feedPosts:[],
         isPosting:false,
         isFeedPostFetched:false,
         isPostingSuccess:false,
@@ -32,7 +31,7 @@ export const usePostStore=create((set,get)=>(
             try{
                 const response=await axios.get('/post/feedPosts');
                 if(response.status===200){
-                    set({feedPosts:response.data.posts,isFeedPostFetched:true})
+                    set({posts:response.data.posts,isFeedPostFetched:true})
                 }
             }catch(error){
                 console.error("Error in feedPost:",error);
@@ -40,16 +39,31 @@ export const usePostStore=create((set,get)=>(
                 toast.error(error.response.data.error||"An error occured")
             }
         },
-        getAllPost:async()=>{
+        getAllUserPost:async({id})=>{
             set({isAllPostFetched:false,allPostError:null})
             try{
-                const response=await axios.get('/post/getAllPost');
+                const response=await axios.get(`/post/getAllUserPost/${id}`);
                 if(response.status===200){
                     set({posts:response.data.posts,isAllPostFetched:true})
                 }
             }catch(error){
                 console.error("Error in getAllPost:",error);
                 set({isAllPostFetched:false,allPostError:error.response.data.error||"An error occured"})
+                toast.error(error.response.data.error||"An error occured")
+            }
+        },
+        likeUnlikeUser:async({id,liked,userId})=>{
+            try{
+                const response=await axios.post(`/post/like/${id}`);
+                if(response.status===200){
+                    if(!liked){
+                        set({posts:get().posts.map((post)=>(post._id===id?{...post,likes:[...post.likes,userId]}:post))})
+                    }else{
+                        set({posts:get().posts.map((post)=>(post._id===id?{...post,likes:post.likes.filter((id)=>id!==userId)}:post))})
+                    }
+                }
+            }catch(error){
+                console.error("Error in followUnfollowUser:",error);
                 toast.error(error.response.data.error||"An error occured")
             }
         }

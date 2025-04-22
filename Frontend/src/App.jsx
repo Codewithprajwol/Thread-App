@@ -44,7 +44,6 @@ function App() {
       </Routes>
         <Toaster/>
     </div>
-        {user && <CreatePost/>}
     </div>
   )
 }

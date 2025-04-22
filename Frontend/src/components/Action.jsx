@@ -1,10 +1,25 @@
+import { useAuthStore } from "@/store/useAuthStore";
+import { usePostStore } from "@/store/usePostStore";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 
-const Action = ( {liked,setLiked}) => {
+const Action = ( {post}) => {
 
-		
+	const user=useAuthStore((state)=>state.user);
+	const [liked,setLiked]=useState(post.likes.includes(user._id));
+	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);
+    
+	const handleLikeUnlikePost=async()=>{
+		if(!user){
+			return toast.error("Please login to like the post")
+		}
+		await likeUnlikeUser({ id:post._id,liked:liked,userId:user._id})
+		setLiked(!liked);
+	}
 
 	return (
+		<div className="flex flex-col gap-2">
 <div className="flex p-2 gap-2 items-center justify-between w-[150px]" onClick={(e)=>{e.preventDefault()}}>
 				<svg
 					aria-label='Like'
@@ -14,7 +29,7 @@ const Action = ( {liked,setLiked}) => {
 					role='img'
 					viewBox='0 0 24 22'
 					width='20'
-					onClick={()=>{setLiked(!liked)}}
+					onClick={handleLikeUnlikePost}
 				>
 					<path
 						d='M1 7.66c0 4.575 3.899 9.086 9.987 12.934.338.203.74.406 1.013.406.283 0 .686-.203 1.013-.406C19.1 16.746 23 12.234 23 7.66 23 3.736 20.245 1 16.672 1 14.603 1 12.98 1.94 12 3.352 11.042 1.952 9.408 1 7.328 1 3.766 1 1 3.736 1 7.66Z'
@@ -45,6 +60,12 @@ const Action = ( {liked,setLiked}) => {
 				<RepostSVG />
 				<ShareSVG />
                 </div>
+				<div className='flex items-center justify-start pl-2 gap-2'>
+              <p>{post.likes.length} likes</p>
+              <div className='w-0.5 h-0.5 rounded-full bg-hello'></div>
+              <p>{post.replies.length} replies</p>
+          </div>
+				</div>
 )
 };
 

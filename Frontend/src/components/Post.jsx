@@ -7,7 +7,7 @@ import axiosInstance from "@/lib/axios"
 import {timeAgo} from "@/utils/timeFinder"
 
 const Post = ({post}) => {
-    const [liked,setLiked]=useState(false)
+
     const [postUserProfile,setPostUserProgfile]=useState(null)
     useEffect(()=>{
         async function fetchUserProfile(){
@@ -50,8 +50,7 @@ const Post = ({post}) => {
           <Link to="/prajwol/post/1" className='flex flex-1 flex-col gap-1'>
               <div className='flex  items-center justify-between'>
                  <div className="flex items-center gap-2">
-                  {/* <h6 className='font-bold'>{profileUser?.name}</h6> */}
-                  <h6 className='font-bold'>{"prau"}</h6>
+                  <h6 className='font-bold'>{postUserProfile?.name}</h6>
                   <div className='w-7 h-7'><img src="/verified.png" alt="verified logo" /></div>
                  </div>
                  <div className="flex items-center gap-2">
@@ -65,12 +64,7 @@ const Post = ({post}) => {
               <div className='w-full max-h-[300px] overflow-hidden rounded-sm'>
               <img src={post.image} alt="post" />
           </div>}
-          <Action liked={liked} setLiked={setLiked}/>
-          <div className='flex items-center justify-start pl-2 gap-2'>
-              <p>{post.replies.length} replies</p>
-              <div className='w-0.5 h-0.5 rounded-full bg-hello'></div>
-              <p>{post.likes.length} likes</p>
-          </div>
+          <Action post={post}/>
           </Link>                                                                 
           
       </div> 
