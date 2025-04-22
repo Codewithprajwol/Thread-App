@@ -10,6 +10,8 @@ export const usePostStore=create((set,get)=>(
         isPostingSuccess:false,
         isAllPostFetched:false,
         allPostError:null,
+        replySuccess:false,
+        replyError:null,
         createUserPost:async({text,image,postedBy})=>{
             set({isPosting:true})
             try{
@@ -64,6 +66,20 @@ export const usePostStore=create((set,get)=>(
                 }
             }catch(error){
                 console.error("Error in followUnfollowUser:",error);
+                toast.error(error.response.data.error||"An error occured")
+            }
+        },
+        replypost:async({id,text,profilePic,username})=>{
+            set({replySuccess:false,replyError:null})
+            try{
+                const response=await axios.post(`/post/replies/${id}`,{text,profilePic,username});
+                if(response.status===200){
+                    set({replySuccess:true,replyError:null})
+                    toast.success("Reply added successfully")
+                }
+            }catch(error){
+                console.error("Error in replypost:",error);
+                set({replySuccess:false,replyError:error.response.data.error||"An error occured"})
                 toast.error(error.response.data.error||"An error occured")
             }
         }

@@ -16,8 +16,10 @@ import { Button } from "./ui/button";
 const Action = ( {post}) => {
 
 	const user=useAuthStore((state)=>state.user);
-	const [liked,setLiked]=useState(post.likes.includes(user._id));
+	const [liked,setLiked]=useState(post?.likes?.includes(user._id));
 	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);
+	const replyPost=usePostStore((state)=>state.replyPost);
+	const [replyText,setReplyText]=useState("");
     
 	const handleLikeUnlikePost=async()=>{
 		if(!user){
@@ -29,10 +31,14 @@ const Action = ( {post}) => {
 
 	const handleReplySubmit=async(e)=>{
 		e.preventDefault();
+		console.log('hi')
+		console.log(replyText)
+		// await replyPost({id:Post._id,text:replyText})
+
 	}
 	return (
 		<div className="flex flex-col gap-2">
-<div className="flex p-2 gap-2 items-center justify-between w-[150px]" onClick={(e)=>{e.preventDefault()}}>
+<div className="flex p-2 items-center justify-between w-[100px]" onClick={(e)=>{e.preventDefault()}}>
 				<svg
 					aria-label='Like'
 					color={liked ? "rgb(237, 73, 86)" : ""}
@@ -75,22 +81,24 @@ const Action = ( {post}) => {
         <DialogHeader>
           <DialogTitle>Reply</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleReplySubmit} className="px-0 flex items-end justify-center gap-4 flex-col">
-			<Textarea placeholder="reply for the post"/>
-        <DialogFooter>
-          <Button type="submit" className='cursor-pointer'>Reply</Button>
-        </DialogFooter>
+        <form onSubmit={(e)=>{console.log("hello ");e.preventDefault()}} className="px-0 flex items-end justify-center gap-4 flex-col">
+			<Textarea placeholder="reply for the post" onChange={(e)=>setReplyText(e.target.value)} value={replyText}/>
+          {/* <Button type="submit" className='cursor-pointer'>Reply</Button> */}
+		  <button type="submit">helo</button>
+		  
+		  {/* <input type="text" onChange={(e)=>setReplyText(e.target.value)} value={replyText} />
+		  <button>reply</button> */}
         </form>
       </DialogContent>
     </Dialog>
 
-				<RepostSVG />
+				{/* <RepostSVG /> */}
 				<ShareSVG />
                 </div>
 				<div className='flex items-center justify-start pl-2 gap-2'>
-              <p>{post.likes.length} likes</p>
+              <p>{post?.likes?.length} likes</p>
               <div className='w-0.5 h-0.5 rounded-full bg-hello'></div>
-              <p>{post.replies.length} replies</p>
+              <p>{post?.replies?.length} replies</p>
           </div>
 				</div>
 )
