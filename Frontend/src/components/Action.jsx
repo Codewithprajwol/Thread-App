@@ -2,7 +2,16 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { usePostStore } from "@/store/usePostStore";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
+import {
+  Dialog,
+  DialogContent,
+	DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog"
+import { Textarea } from './ui/textarea'
+import { Button } from "./ui/button";
 
 const Action = ( {post}) => {
 
@@ -18,6 +27,9 @@ const Action = ( {post}) => {
 		setLiked(!liked);
 	}
 
+	const handleReplySubmit=async(e)=>{
+		e.preventDefault();
+	}
 	return (
 		<div className="flex flex-col gap-2">
 <div className="flex p-2 gap-2 items-center justify-between w-[150px]" onClick={(e)=>{e.preventDefault()}}>
@@ -38,7 +50,9 @@ const Action = ( {post}) => {
 					></path>
 				</svg>
 
-				<svg
+				<Dialog  >
+      <DialogTrigger asChild>
+	  			<svg
 					aria-label='Comment'
 					color=''
 					fill=''
@@ -56,6 +70,19 @@ const Action = ( {post}) => {
 						strokeWidth='2'
 					></path>
 				</svg>
+      </DialogTrigger>
+      <DialogContent aria-describedby={undefined}  className="sm:max-w-[425px] px-2 sm:px-4">
+        <DialogHeader>
+          <DialogTitle>Reply</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleReplySubmit} className="px-0 flex items-end justify-center gap-4 flex-col">
+			<Textarea placeholder="reply for the post"/>
+        <DialogFooter>
+          <Button type="submit" className='cursor-pointer'>Reply</Button>
+        </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
 
 				<RepostSVG />
 				<ShareSVG />
