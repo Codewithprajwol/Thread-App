@@ -1,44 +1,64 @@
 import Action from "@/components/Action";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
 import Comments from "@/components/Comments";
+import { useParams } from "react-router-dom";
+import { usePostStore } from "@/store/usePostStore";
+import { Loader } from "lucide-react";
+import { timeAgo } from "@/utils/timeFinder";
+import toast from "react-hot-toast";
 
 const PostPage = () => {
-  const [liked, setLiked] = useState(false);
+  const paramsData=useParams()
+  const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading}=usePostStore();
+
+  useEffect(()=>{
+     getPostByusernameAndId({username:paramsData.username,id:paramsData.id})
+    if(isUserPostError){
+      toast.error("Error fetching post");
+    }
+  },[getPostByusernameAndId])
+   if(isUserPostLoading){
+    return (
+      <div className="flex items-center justify-center h-screen ">
+           <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />
+      </div>
+      )
+   }
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-2 items-start justify-center">
+      <div className="flex flex-col gap-2 items-start justify-center pt-5">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-between w-8 h-8 rounded-full overflow-hidden">
               <img
-                src="/zuck-avatar.png"
-                alt="zuckerberg"
+                src={postUserProfile?.profilePic}
+                alt={postUserProfile?.name}
                 className="w-full h-full object-cover"
               />
             </div>
-            <h6 className="font-bold">markzukerberg</h6>
+            <h6 className="font-bold">{postUserProfile?.name}</h6>
             <div className="w-7 h-7">
               <img src="/verified.png" alt="verified logo" />
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <h6 className="font-bold text-[.8rem] text-[#dadada]">1d</h6>
+            <h6 className="font-bold text-[.8rem] text-[#dadada]">{timeAgo(post?.createdAt)}</h6>
             <BsThreeDots />
           </div>
         </div>
-        <p className="text-[0.8rem]">let talk about threads.</p>
-        <div className="w-full max-h-auto overflow-hidden rounded-sm">
-          <img src={"/post1.png"} alt="post" />
-        </div>
-        <Action liked={liked} setLiked={setLiked} />
-        <div className="flex items-center justify-start pl-2 gap-2">
+        <p className="text-[0.8rem]">{post?.text}</p>
+        {post?.image && <div className="w-full max-h-auto overflow-hidden rounded-sm">
+          <img src={post?.image} alt="post image" />
+        </div>}
+        <Action post={post} />
+        {/* <div className="flex items-center justify-start pl-2 gap-2">
           <p>{599 + (liked ? 1 : 0)} likes</p>
           <div className="w-0.5 h-0.5 rounded-full bg-hello"></div>
           <p>{400} replies</p>
-        </div>
+        </div> */}
         {/* seperator */}
         <Separator className="my-4" />
 
@@ -55,21 +75,10 @@ const PostPage = () => {
         {/* seperator */}
         <Separator className="my-4" />
 
-        {/* comment Section */}
-        <Comments
-          comment="looks really amazing"
-          createdAt="2d"
-          likes={201}
-          userName={"krishna"}
-          userAvatar="https://avatars.githubusercontent.com/u/583231?v=4
-"/>
-        <Comments
-          comment="looks really amazing"
-          createdAt="2d"
-          likes={201}
-          userName={"krishna"}
-          userAvatar="https://avatars.githubusercontent.com/u/583231?v=4
-"/>
+     {post.replies.length!==0?post?.replies?.map((reply)=>(<Comments
+          key={reply._id}
+          post={post}
+          reply={reply}/>)):<div className="text-center w-full text-bold">No Comments Yet</div>}
       </div>
     </div>
   );

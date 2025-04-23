@@ -11,7 +11,6 @@ const UserPage = () => {
      const {getProfile,profileUser,isGetProfileLoading,hasFetchedProfile,user}=useAuthStore();
      const {getAllUserPost,allPostError,isAllPostFetched,posts}=usePostStore();
      const query=useParams();
-     
      useEffect(()=>{
        getProfile({query:query.username});
       },[query.username])

@@ -5,6 +5,8 @@ import {create} from 'zustand'
 export const usePostStore=create((set,get)=>(
     {
         posts:[],
+        post:null,
+        postUserProfile:null,
         isPosting:false,
         isFeedPostFetched:false,
         isPostingSuccess:false,
@@ -13,6 +15,9 @@ export const usePostStore=create((set,get)=>(
         replySuccess:false,
         replyError:null,
         isReplying:false,
+        isUserpostFetched:false,
+        isUserPostError:null,
+        isUserPostLoading:false,
         createUserPost:async({text,image,postedBy})=>{
             set({isPosting:true})
             try{
@@ -76,12 +81,28 @@ export const usePostStore=create((set,get)=>(
                 const response=await axios.post(`/post/replies/${id}`,{text,profilePic,username});
                 if(response.status===200){
                     set({replySuccess:true,replyError:null,isReplying:false})
+                    set({posts:get().posts.map((post)=>(post._id===id?{...post,replies:[...post.replies,response.data.reply]}:post))})
                     toast.success("Reply added successfully")
                 }
             }catch(error){
                 console.error("Error in replypost:",error);
                 set({replySuccess:false,isReplying:false,replyError:error.response.data.error||"An error occured"})
                 toast.error(error.response.data.error||"An error occured")
+            }
+        },
+        getPostByusernameAndId:async({username,id})=>{
+            set({  isUserpostFetched:false,
+                isUserPostError:null,
+                isUserPostLoading:true})
+            try{
+                const response=await axios.post(`post/${username}/post/${id}`);
+                if(response.status===200){
+                    set(({post:response.data.post,postUserProfile:response.data.user,isUserpostFetched:true,isUserPostLoading:false}))
+                }
+            }catch(error){
+                console.error("Error in getPostByusernameAndId:",error);
+                toast.error(error.response.data.error||"An error occured")
+                set({isUserPostLoading:false,isUserpostFetched:false,isUserPostError:error.response.data.error||"An error occured"})
             }
         }
 

@@ -12,7 +12,6 @@ import { useEffect } from "react"
 import HomePage from "./pages/HomePage"
 import UpdateProfilePage from "./pages/UpdateProfilePage"
 import { Loader } from "lucide-react"
-import CreatePost from "./components/CreatePost"
 
 function App() {
   const {checkAuth,user,isAuthenticated}=useAuthStore();

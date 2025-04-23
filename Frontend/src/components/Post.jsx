@@ -8,13 +8,13 @@ import {timeAgo} from "@/utils/timeFinder"
 
 const Post = ({post}) => {
 
-    const [postUserProfile,setPostUserProgfile]=useState(null)
+    const [postUserProfile,setPostUserProfile]=useState(null)
     useEffect(()=>{
         async function fetchUserProfile(){
             try{
              const response=await axiosInstance.get(`/user/profile/${post.postedBy}`)
              if(response.status===200){
-                setPostUserProgfile(response.data.user);
+                setPostUserProfile(response.data.user);
              }
             }catch(error){
                 console.error("Error fetching user profile:",error)
@@ -47,7 +47,7 @@ const Post = ({post}) => {
   
                   </div>
           </div>
-          <Link to="/prajwol/post/1" className='flex flex-1 flex-col gap-1'>
+          <Link to={`/${postUserProfile?.username}/post/${post?._id}`} className='flex flex-1 flex-col gap-1'>
               <div className='flex  items-center justify-between'>
                  <div className="flex items-center gap-2">
                   <h6 className='font-bold'>{postUserProfile?.name}</h6>

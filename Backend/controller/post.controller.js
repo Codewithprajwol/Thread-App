@@ -63,17 +63,16 @@ export const getAllUserPost=async(req,res)=>{
     }
 }
 
-export const getPostById=async(req,res)=>{
+export const getPostByusernameAndId=async(req,res)=>{
     try{
-
-            const {id}=req.params;
+            const {id,username}=req.params;
+            const user=await User.findOne({username:username})
             const post=await Post.findById(id);
-            console.log(post)
             if(!post){
               res.status(400).json({error:"post not found"});
               return;
             }
-            res.status(200).json({post:post});
+            res.status(200).json({post:post,user:user});
 
     }catch(error){
         console.log("error in getPostById controller",error.message);
@@ -146,7 +145,7 @@ export const replypost=async(req,res)=>{
             username:username,
         }
         await Post.findByIdAndUpdate(id,{$push:{replies:reply}});
-        res.status(200).json({message:"reply added successfully"});
+        res.status(200).json({message:"reply added successfully",reply:reply});
       }catch(error){
             console.log("error in replypost controller",error.message);
             res.status(500).json({error:"internal server error"});
