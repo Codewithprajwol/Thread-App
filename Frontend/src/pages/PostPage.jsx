@@ -12,14 +12,14 @@ import toast from "react-hot-toast";
 
 const PostPage = () => {
   const paramsData=useParams()
-  const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading}=usePostStore();
+  const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading,posts}=usePostStore();
 
   useEffect(()=>{
      getPostByusernameAndId({username:paramsData.username,id:paramsData.id})
     if(isUserPostError){
       toast.error("Error fetching post");
     }
-  },[getPostByusernameAndId])
+  },[getPostByusernameAndId,])
    if(isUserPostLoading){
     return (
       <div className="flex items-center justify-center h-screen ">
@@ -54,12 +54,7 @@ const PostPage = () => {
           <img src={post?.image} alt="post image" />
         </div>}
         <Action post={post} />
-        {/* <div className="flex items-center justify-start pl-2 gap-2">
-          <p>{599 + (liked ? 1 : 0)} likes</p>
-          <div className="w-0.5 h-0.5 rounded-full bg-hello"></div>
-          <p>{400} replies</p>
-        </div> */}
-        {/* seperator */}
+        
         <Separator className="my-4" />
 
         {/* get app */}
@@ -75,7 +70,7 @@ const PostPage = () => {
         {/* seperator */}
         <Separator className="my-4" />
 
-     {post.replies.length!==0?post?.replies?.map((reply)=>(<Comments
+     {post?.replies?.length!==0?post?.replies?.map((reply)=>(<Comments
           key={reply._id}
           post={post}
           reply={reply}/>)):<div className="text-center w-full text-bold">No Comments Yet</div>}

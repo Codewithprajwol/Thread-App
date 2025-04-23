@@ -18,8 +18,7 @@ const Comments = ({reply,post}) => {
             }
         }
         getReplyUser();
-    },[])
-    console.log(replyUser);
+    },[reply?.userId])
   return (
     <div className='w-full mt-4 flex items-start gap-3 justfiy-between p-4 rounded-md border-2 border-gray-700/40'>
         <div className='flex flex-col gap-2 items-center justify-start'>

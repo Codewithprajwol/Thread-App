@@ -14,7 +14,7 @@ import { Textarea } from './ui/textarea'
 import { Button } from "./ui/button";
 import { Loader } from "lucide-react";
 
-const Action = ( {post}) => {
+const Action = ({post}) => {
 
 	const user=useAuthStore((state)=>state.user);
 	const [liked,setLiked]=useState(post?.likes?.includes(user._id));

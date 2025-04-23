@@ -82,6 +82,7 @@ export const usePostStore=create((set,get)=>(
                 if(response.status===200){
                     set({replySuccess:true,replyError:null,isReplying:false})
                     set({posts:get().posts.map((post)=>(post._id===id?{...post,replies:[...post.replies,response.data.reply]}:post))})
+                    set({post:get().post?{...get().post,replies:[...get().post.replies,response.data.reply]}:null})
                     toast.success("Reply added successfully")
                 }
             }catch(error){
