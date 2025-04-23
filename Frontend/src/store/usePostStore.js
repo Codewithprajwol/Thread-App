@@ -12,6 +12,7 @@ export const usePostStore=create((set,get)=>(
         allPostError:null,
         replySuccess:false,
         replyError:null,
+        isReplying:false,
         createUserPost:async({text,image,postedBy})=>{
             set({isPosting:true})
             try{
@@ -69,17 +70,17 @@ export const usePostStore=create((set,get)=>(
                 toast.error(error.response.data.error||"An error occured")
             }
         },
-        replypost:async({id,text,profilePic,username})=>{
-            set({replySuccess:false,replyError:null})
+        replyPost:async({id,text,profilePic,username})=>{
+            set({replySuccess:false,replyError:null,isReplying:true})
             try{
                 const response=await axios.post(`/post/replies/${id}`,{text,profilePic,username});
                 if(response.status===200){
-                    set({replySuccess:true,replyError:null})
+                    set({replySuccess:true,replyError:null,isReplying:false})
                     toast.success("Reply added successfully")
                 }
             }catch(error){
                 console.error("Error in replypost:",error);
-                set({replySuccess:false,replyError:error.response.data.error||"An error occured"})
+                set({replySuccess:false,isReplying:false,replyError:error.response.data.error||"An error occured"})
                 toast.error(error.response.data.error||"An error occured")
             }
         }

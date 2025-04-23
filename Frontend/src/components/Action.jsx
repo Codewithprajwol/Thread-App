@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/store/useAuthStore";
 import { usePostStore } from "@/store/usePostStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Dialog,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from './ui/textarea'
 import { Button } from "./ui/button";
+import { Loader } from "lucide-react";
 
 const Action = ( {post}) => {
 
@@ -20,6 +21,8 @@ const Action = ( {post}) => {
 	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);
 	const replyPost=usePostStore((state)=>state.replyPost);
 	const [replyText,setReplyText]=useState("");
+	const {replySuccess,replyError,isReplying}=usePostStore();
+	const [open,setOpen]=useState(false);
     
 	const handleLikeUnlikePost=async()=>{
 		if(!user){
@@ -28,17 +31,18 @@ const Action = ( {post}) => {
 		await likeUnlikeUser({ id:post._id,liked:liked,userId:user._id})
 		setLiked(!liked);
 	}
+	useEffect(()=>{
+     if(replySuccess && !replyError){
+			setOpen(false)
+	 }
+	},[replySuccess])
 
-	const handleReplySubmit=async(e)=>{
-		e.preventDefault();
-		console.log('hi')
-		console.log(replyText)
-		// await replyPost({id:Post._id,text:replyText})
-
+	const handleReplySubmit=async()=>{
+		await replyPost({id:post._id,text:replyText,profilePic:user?.profilePic,username:user?.name})
 	}
 	return (
-		<div className="flex flex-col gap-2">
-<div className="flex p-2 items-center justify-between w-[100px]" onClick={(e)=>{e.preventDefault()}}>
+		<div className="flex flex-col gap-2" >
+<div className="flex p-2 items-center justify-between w-[100px]" onClick={(e)=>{e.stopPropagation();e.preventDefault()}} >
 				<svg
 					aria-label='Like'
 					color={liked ? "rgb(237, 73, 86)" : ""}
@@ -56,7 +60,7 @@ const Action = ( {post}) => {
 					></path>
 				</svg>
 
-				<Dialog  >
+				<Dialog open={open} onOpenChange={setOpen} >
       <DialogTrigger asChild>
 	  			<svg
 					aria-label='Comment'
@@ -81,14 +85,15 @@ const Action = ( {post}) => {
         <DialogHeader>
           <DialogTitle>Reply</DialogTitle>
         </DialogHeader>
-        <form onSubmit={(e)=>{console.log("hello ");e.preventDefault()}} className="px-0 flex items-end justify-center gap-4 flex-col">
+        <div className="px-0 flex items-end justify-center gap-4 flex-col">
 			<Textarea placeholder="reply for the post" onChange={(e)=>setReplyText(e.target.value)} value={replyText}/>
-          {/* <Button type="submit" className='cursor-pointer'>Reply</Button> */}
-		  <button type="submit">helo</button>
-		  
-		  {/* <input type="text" onChange={(e)=>setReplyText(e.target.value)} value={replyText} />
-		  <button>reply</button> */}
-        </form>
+          <Button type="button" onClick={handleReplySubmit} className='cursor-pointer'>{isReplying?(
+						<>
+							<Loader className='mr-2 h-5 w-5 animate-spin' aria-hidden='true' />
+							replying...
+						</>
+					):'reply'}</Button>
+        </div>
       </DialogContent>
     </Dialog>
 

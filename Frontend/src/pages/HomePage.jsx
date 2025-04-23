@@ -12,7 +12,6 @@ const HomePage = () => {
 
   return (
     <div className='h-screen w-full'>
-       
         {isFeedPostFetched?posts.length===0?<h1 className='text-center pt-4'>Follow SomeOne to see the feed Posts</h1>:posts.map((post)=><Post key={post._id} post={post}/>):( <div className="flex items-center justify-center h-screen">
         <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />
    </div>)}
