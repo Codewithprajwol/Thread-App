@@ -13,16 +13,18 @@ import {
 import { Textarea } from './ui/textarea'
 import { Button } from "./ui/button";
 import { Loader } from "lucide-react";
+import { useReplyStore } from "@/store/useReplyStore";
 
 const Action = ({post}) => {
 
 	const user=useAuthStore((state)=>state.user);
 	const [liked,setLiked]=useState(post?.likes?.includes(user._id));
 	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);
-	const replyPost=usePostStore((state)=>state.replyPost);
+	// const replyPost=usePostStore((state)=>state.replyPost);
 	const [replyText,setReplyText]=useState("");
-	const {replySuccess,replyError,isReplying}=usePostStore();
+	// const {replySuccess,replyError,isReplying}=usePostStore();
 	const [open,setOpen]=useState(false);
+	const {createReply,replySuccess,replyError,isReplying}=useReplyStore();
     
 	const handleLikeUnlikePost=async()=>{
 		if(!user){
@@ -38,7 +40,7 @@ const Action = ({post}) => {
 	},[replySuccess])
 
 	const handleReplySubmit=async()=>{
-		await replyPost({id:post._id,text:replyText,profilePic:user?.profilePic,username:user?.name})
+		await createReply({userId:user._id,postId:post._id,profilePic:user?.profilePic,username:user?.name,text:replyText})
 	}
 	return (
 		<div className="flex flex-col gap-2" >

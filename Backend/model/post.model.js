@@ -19,28 +19,6 @@ const postSchema=new mongoose.Schema({
         ref:"User",
         default:[],
     },
-    replies:{
-        type:[
-            {
-                userId:{
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"User",
-                required:true,
-                },
-                text:{
-                    type:String,
-                    required:true,
-                },
-                profilePic:{
-                    type:String,
-                },
-                username:{
-                    type:String,
-                }
-            }
-        
-        ],
-    }
 },{
     timestamps:true
 })
