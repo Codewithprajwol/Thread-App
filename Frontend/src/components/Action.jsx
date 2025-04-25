@@ -20,11 +20,9 @@ const Action = ({post}) => {
 	const user=useAuthStore((state)=>state.user);
 	const [liked,setLiked]=useState(post?.likes?.includes(user._id));
 	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);
-	// const replyPost=usePostStore((state)=>state.replyPost);
 	const [replyText,setReplyText]=useState("");
-	// const {replySuccess,replyError,isReplying}=usePostStore();
 	const [open,setOpen]=useState(false);
-	const {createReply,replySuccess,replyError,isReplying}=useReplyStore();
+	const {createReply,replys,getReplys,replySuccess,replyError,isReplying}=useReplyStore();
     
 	const handleLikeUnlikePost=async()=>{
 		if(!user){
@@ -33,6 +31,10 @@ const Action = ({post}) => {
 		await likeUnlikeUser({ id:post._id,liked:liked,userId:user._id})
 		setLiked(!liked);
 	}
+	// useEffect(()=>{
+
+	// },[])
+	
 	useEffect(()=>{
      if(replySuccess && !replyError){
 			setOpen(false)
@@ -59,7 +61,7 @@ const Action = ({post}) => {
 						d='M1 7.66c0 4.575 3.899 9.086 9.987 12.934.338.203.74.406 1.013.406.283 0 .686-.203 1.013-.406C19.1 16.746 23 12.234 23 7.66 23 3.736 20.245 1 16.672 1 14.603 1 12.98 1.94 12 3.352 11.042 1.952 9.408 1 7.328 1 3.766 1 1 3.736 1 7.66Z'
 						stroke='currentColor'
 						strokeWidth='2'
-					></path>
+					></path> 
 				</svg>
 
 				<Dialog open={open} onOpenChange={setOpen} >
@@ -105,7 +107,7 @@ const Action = ({post}) => {
 				<div className='flex items-center justify-start pl-2 gap-2'>
               <p>{post?.likes?.length} likes</p>
               <div className='w-0.5 h-0.5 rounded-full bg-hello'></div>
-              <p>{post?.replies?.length} replies</p>
+              <p>{replys?.length} replies</p>
           </div>
 				</div>
 )

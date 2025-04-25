@@ -1,6 +1,6 @@
 import Action from "@/components/Action";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
 import Comments from "@/components/Comments";
@@ -9,17 +9,28 @@ import { usePostStore } from "@/store/usePostStore";
 import { Loader } from "lucide-react";
 import { timeAgo } from "@/utils/timeFinder";
 import toast from "react-hot-toast";
+import { useReplyStore } from "@/store/useReplyStore";
 
 const PostPage = () => {
   const paramsData=useParams()
-  const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading,posts}=usePostStore();
+  const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading}=usePostStore();
+    const {replys,getReplys}=useReplyStore();
+  
+  
 
   useEffect(()=>{
      getPostByusernameAndId({username:paramsData.username,id:paramsData.id})
     if(isUserPostError){
       toast.error("Error fetching post");
     }
-  },[getPostByusernameAndId,])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[getPostByusernameAndId])
+  
+  useEffect(()=>{
+    if(isUserPostFetched && post?._id){
+      getReplys(post?._id);
+    }
+    },[getReplys,post?._id,isUserPostFetched])
    if(isUserPostLoading){
     return (
       <div className="flex items-center justify-center h-screen ">
@@ -70,7 +81,7 @@ const PostPage = () => {
         {/* seperator */}
         <Separator className="my-4" />
 
-     {post?.replies?.length!==0?post?.replies?.map((reply)=>(<Comments
+     {replys?.length!==0?replys?.map((reply)=>(<Comments
           key={reply._id}
           post={post}
           reply={reply}/>)):<div className="text-center w-full text-bold">No Comments Yet</div>}

@@ -15,7 +15,7 @@ export const usePostStore=create((set,get)=>(
         replySuccess:false,
         replyError:null,
         isReplying:false,
-        isUserpostFetched:false,
+        isUserPostFetched:false,
         isUserPostError:null,
         isUserPostLoading:false,
         createUserPost:async({text,image,postedBy})=>{
@@ -92,18 +92,18 @@ export const usePostStore=create((set,get)=>(
             }
         },
         getPostByusernameAndId:async({username,id})=>{
-            set({  isUserpostFetched:false,
+            set({  isUserPostFetched:false,
                 isUserPostError:null,
                 isUserPostLoading:true})
             try{
                 const response=await axios.post(`post/${username}/post/${id}`);
                 if(response.status===200){
-                    set(({post:response.data.post,postUserProfile:response.data.user,isUserpostFetched:true,isUserPostLoading:false}))
+                    set(({post:response.data.post,postUserProfile:response.data.user,isUserPostFetched:true,isUserPostLoading:false}))
                 }
             }catch(error){
                 console.error("Error in getPostByusernameAndId:",error);
                 toast.error(error.response.data.error||"An error occured")
-                set({isUserPostLoading:false,isUserpostFetched:false,isUserPostError:error.response.data.error||"An error occured"})
+                set({isUserPostLoading:false,isUserPostFetched:false,isUserPostError:error.response.data.error||"An error occured"})
             }
         }
 

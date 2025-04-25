@@ -3,6 +3,7 @@ import { BsThreeDots } from 'react-icons/bs'
 import Action from './Action'
 import { Link } from 'react-router-dom'
 import axiosInstance from '@/lib/axios'
+import { timeAgo } from '@/utils/timeFinder'
 
 const Comments = ({reply,post}) => {
     const [replyUser,setReplyUser]=useState(null);     
@@ -35,7 +36,7 @@ const Comments = ({reply,post}) => {
                 <div className='w-7 h-7'><img src="/verified.png" alt="verified logo" /></div>
                </div>
                <div className="flex items-center gap-2">
-                <h6 className='font-bold text-[.8rem] text-[#dadada]'>{"1d"}</h6>
+                <h6 className='font-bold text-[.8rem] text-[#dadada]'>{timeAgo(reply.createdAt)}</h6>
                 <BsThreeDots />
                </div>
                 
