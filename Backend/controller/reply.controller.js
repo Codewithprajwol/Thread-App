@@ -1,5 +1,6 @@
 import Reply from "../model/reply.model.js";
 
+
 export const createReply=async(req,res)=>{
     const {userId,postId,parentReplyId,text,username,profilePic}=req.body;
     try{
@@ -54,7 +55,7 @@ export const likeUnlikeReply=async(req,res)=>{
         }else{
             //like
             await Reply.findByIdAndUpdate(replyId,{$push:{likes:req.user._id}});
-            re.status(200).json({message:"reply liked successfully"});
+            res.status(200).json({message:"reply liked successfully"});
         }
 
 

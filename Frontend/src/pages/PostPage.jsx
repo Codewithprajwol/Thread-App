@@ -14,10 +14,8 @@ import { useReplyStore } from "@/store/useReplyStore";
 const PostPage = () => {
   const paramsData=useParams()
   const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading}=usePostStore();
-    const {replys,getReplys}=useReplyStore();
+    const {replys,getReplys,isReplying}=useReplyStore();
   
-  
-
   useEffect(()=>{
      getPostByusernameAndId({username:paramsData.username,id:paramsData.id})
     if(isUserPostError){
@@ -31,7 +29,7 @@ const PostPage = () => {
       getReplys(post?._id);
     }
     },[getReplys,post?._id,isUserPostFetched])
-   if(isUserPostLoading){
+   if(isUserPostLoading  ){
     return (
       <div className="flex items-center justify-center h-screen ">
            <Loader className='mr-2 h-10 w-10 animate-spin' aria-hidden='true' />

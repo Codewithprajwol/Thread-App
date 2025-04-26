@@ -4,6 +4,7 @@ import Action from './Action'
 import { Link } from 'react-router-dom'
 import axiosInstance from '@/lib/axios'
 import { timeAgo } from '@/utils/timeFinder'
+import ActionForReply from './ActionForReply'
 
 const Comments = ({reply,post}) => {
     const [replyUser,setReplyUser]=useState(null);     
@@ -21,6 +22,7 @@ const Comments = ({reply,post}) => {
         getReplyUser();
     },[reply?.userId])
   return (
+    <>
     <div className='w-full mt-4 flex items-start gap-3 justfiy-between p-4 rounded-md border-2 border-gray-700/40'>
         <div className='flex flex-col gap-2 items-center justify-start'>
             <div className='flex items-center justify-between w-8 h-8 rounded-full overflow-hidden'>
@@ -42,10 +44,16 @@ const Comments = ({reply,post}) => {
                 
             </div>
             <p className='text-[0.8rem]'>{reply?.text}</p>
-        <Action post={post}/>
+        <ActionForReply reply={reply} post={post}/>
         </div>                                                                 
         
     </div>
+    {reply?.children?.length>0 && reply?.children.map((childReply)=>(
+        <div key={childReply._id} className='w-[90%] '>
+            <Comments reply={childReply} post={post}/>
+        </div>
+    ))}
+    </>
   )
 }
 

@@ -16,14 +16,15 @@ import { Loader } from "lucide-react";
 import { useReplyStore } from "@/store/useReplyStore";
 
 const Action = ({post}) => {
+	console.log('yamuna ')
 
 	const user=useAuthStore((state)=>state.user);
 	const [liked,setLiked]=useState(post?.likes?.includes(user._id));
 	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);
 	const [replyText,setReplyText]=useState("");
 	const [open,setOpen]=useState(false);
-	const {createReply,replys,getReplys,replySuccess,replyError,isReplying}=useReplyStore();
-    
+	const {createReply,getReplys,replySuccess,replyError,isReplying}=useReplyStore();
+    const replys=useReplyStore((state)=>state.replys)
 	const handleLikeUnlikePost=async()=>{
 		if(!user){
 			return toast.error("Please login to like the post")
@@ -31,15 +32,18 @@ const Action = ({post}) => {
 		await likeUnlikeUser({ id:post._id,liked:liked,userId:user._id})
 		setLiked(!liked);
 	}
-	// useEffect(()=>{
+	 useEffect(()=>{
+		if(post?._id){
+		  getReplys(post?._id);
+		}
+		},[post?._id])
 
-	// },[])
-	
+
 	useEffect(()=>{
      if(replySuccess && !replyError){
 			setOpen(false)
 	 }
-	},[replySuccess])
+	},[replySuccess,replyError])
 
 	const handleReplySubmit=async()=>{
 		await createReply({userId:user._id,postId:post._id,profilePic:user?.profilePic,username:user?.name,text:replyText})
