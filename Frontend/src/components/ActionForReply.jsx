@@ -46,10 +46,11 @@ const ActionForReply = ({post,reply}) => {
 
     const handleReplySubmit=async()=>{
         await createReply({userId:user._id,postId:post._id,profilePic:user?.profilePic,username:user?.name,text:replyText,parentReplyId:reply._id})
+        setReplyText("");
     }
     return (
         <div className="flex flex-col gap-2" >
-<div className="flex p-2 items-center justify-between w-[100px]" onClick={(e)=>{e.stopPropagation();e.preventDefault()}} >
+<div className="flex p-2 items-center justify-between w-[80px]" onClick={(e)=>{e.stopPropagation();e.preventDefault()}} >
                 <svg
                     aria-label='Like'
                     color={liked ? "rgb(237, 73, 86)" : ""}
@@ -105,7 +106,7 @@ const ActionForReply = ({post,reply}) => {
     </Dialog>
 
                 {/* <RepostSVG /> */}
-                <ShareSVG />
+                {/* <ShareSVG /> */}
                 </div>
                 <div className='flex items-center justify-start pl-2 gap-2'>
               <p>{reply?.likes?.length} likes</p>

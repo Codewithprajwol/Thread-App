@@ -47,6 +47,7 @@ const Action = ({post}) => {
 
 	const handleReplySubmit=async()=>{
 		await createReply({userId:user._id,postId:post._id,profilePic:user?.profilePic,username:user?.name,text:replyText})
+		setReplyText("");
 	}
 	return (
 		<div className="flex flex-col gap-2" >
