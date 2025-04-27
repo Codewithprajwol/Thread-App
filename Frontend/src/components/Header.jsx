@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import {  HomeIcon, User } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import Logout from './Logout'
+import {BsFillChatDotsFill, BsFillChatFill, BsFillChatHeartFill, BsFillChatQuoteFill } from 'react-icons/bs'
 
 const   Header = () => {
   const [darkMode, setDarkMode] = useState("dark")
@@ -28,6 +29,7 @@ const uiSituation=localStorage.getItem('vite-ui-theme');
         <img onClick={toggleDarkMode} src={ darkMode=="dark"?uiSituation=="light"?DarkMode: LightMode:DarkMode} alt='Dark Mode' className='w-7 h-7 '/>
         <div className='flex items-center justify-between gap-3'>
          {user && <Link to={`/${user?.username}`}><User className='size-5'/></Link>}
+         {user && <Link to={`/chat`}><BsFillChatHeartFill size={20}/></Link>}
          {user && <Logout/>}
         </div>
     </div>

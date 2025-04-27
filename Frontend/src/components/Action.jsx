@@ -16,8 +16,6 @@ import { Loader } from "lucide-react";
 import { useReplyStore } from "@/store/useReplyStore";
 
 const Action = ({post}) => {
-	console.log('yamuna ')
-
 	const user=useAuthStore((state)=>state.user);
 	const [liked,setLiked]=useState(post?.likes?.includes(user._id));
 	const likeUnlikeUser=usePostStore((state)=>state.likeUnlikeUser);

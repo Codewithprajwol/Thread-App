@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import React, { useEffect, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BsThreeDots } from 'react-icons/bs'
 import Action from './Action'
 import axiosInstance from "@/lib/axios"
@@ -12,6 +12,7 @@ import { useReplyStore } from "@/store/useReplyStore"
 import { motion } from "framer-motion"
 
 const Post = ({ post }) => {
+    const navigate=useNavigate();
     const user = useAuthStore((state) => state.user);
     const [postUserProfile, setPostUserProfile] = useState(null)
     const deletePost = usePostStore((state) => state.deletePost);
@@ -47,19 +48,15 @@ const Post = ({ post }) => {
                 {post.image ? <div className=' h-[250px] sm:h-[370px] md:[400px] w-[.1rem] bg-[#c0baba42]'></div> : <div className=' h-[100px] w-[.1rem] bg-[#c0baba42]'></div>}
                 <div className='relative w-full'>
                     {replys?.length === 0 && (<motion.div
-                        animate={{ y: [0, -4, 0] }} // move left and come back
+                        animate={{ y: [0, -4, 0] }} 
                         transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                         className="absolute bottom-0 left-1 w-6 h-6 rounded-full overflow-hidden"
                     >
                         🤔
-                        {/* <Avatar className="w-full h-full">
-                                <AvatarImage src={replys?.[0].profilePic} />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar> */}
                     </motion.div>)}
                     {replys?.[1] && (
                         <motion.div
-                            animate={{ y: [0, -4, 0] }} // move left and come back
+                            animate={{ y: [0, -4, 0] }} 
                             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                             className="absolute top-0 -left-5 w-6 h-6 rounded-full overflow-hidden"
                         >
@@ -73,7 +70,7 @@ const Post = ({ post }) => {
 
                     {replys?.[2] && (
                         <motion.div
-                            animate={{ y: [0, -4, 0] }} // move left and come back
+                            animate={{ y: [0, -4, 0] }} 
                             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                             className="absolute top-0 -right-5  w-6 h-6 rounded-full overflow-hidden"
                         >
@@ -85,7 +82,7 @@ const Post = ({ post }) => {
 
                     {replys?.[0] && (
                         <motion.div
-                            animate={{ y: [0, -4, 0] }} // move left and come back
+                            animate={{ y: [0, -4, 0] }} 
                             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                             className="absolute bottom-0 left-1 w-6 h-6 rounded-full overflow-hidden"
                         >
@@ -100,7 +97,7 @@ const Post = ({ post }) => {
             <Link to={`/${postUserProfile?.username}/post/${post?._id}`} className='flex flex-1 flex-col gap-1'>
                 <div className='flex  items-center justify-between'>
                     <div className="flex items-center gap-2">
-                        <Link to={`/${postUserProfile?.username}`} className='font-bold'>{postUserProfile?.name}</Link>
+                        <h6 onClick={(e)=>{e.stopPropagation(); e.preventDefault();  navigate(`/${postUserProfile?.username}`)}} className='font-bold'>{postUserProfile?.name}</h6>
                         <div className='w-7 h-7'><img src="/verified.png" alt="verified logo" /></div>
                     </div>
                     <div className="flex items-center gap-2">

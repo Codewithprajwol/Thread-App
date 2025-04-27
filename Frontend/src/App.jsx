@@ -12,6 +12,7 @@ import { useEffect } from "react"
 import HomePage from "./pages/HomePage"
 import UpdateProfilePage from "./pages/UpdateProfilePage"
 import { Loader } from "lucide-react"
+import ChatPage from "./pages/ChatPage"
 
 function App() {
   const {checkAuth,user,isAuthenticated}=useAuthStore();
@@ -40,6 +41,7 @@ function App() {
         <Route path="/forget-password" element={<ForgetPasswordPage/>}/>
         <Route path="/reset-password/:token" element={<ResetPasswordPage />}/>
         <Route path="/updateProfile" element={<UpdateProfilePage user={user}/>}/>
+        <Route path="/chat" element={user?<ChatPage/>:<Navigate to='/auth'/>}/>
       </Routes>
         <Toaster/>
     </div>
