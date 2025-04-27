@@ -65,7 +65,7 @@ const Post = ({ post }) => {
                         >
                             <Avatar className='w-full h-full' >
 
-                                <AvatarImage src={replys?.[1].profilePic} />
+                                <AvatarImage className='w-full h-full object-cover object-top' src={replys?.[1].profilePic} />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </motion.div>
@@ -78,7 +78,7 @@ const Post = ({ post }) => {
                             className="absolute top-0 -right-5  w-6 h-6 rounded-full overflow-hidden"
                         >
                             <Avatar className="w-full h-full">
-                                <AvatarImage src={replys?.[2].profilePic} />
+                                <AvatarImage className='w-full h-full object-cover object-top' src={replys?.[2].profilePic} />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </motion.div>)}
@@ -89,8 +89,8 @@ const Post = ({ post }) => {
                             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                             className="absolute bottom-0 left-1 w-6 h-6 rounded-full overflow-hidden"
                         >
-                            <Avatar className="w-full h-full">
-                                <AvatarImage src={replys?.[0].profilePic} />
+                            <Avatar className="w-full h-full ">
+                                <AvatarImage className='w-full h-full object-cover object-top' src={replys?.[0].profilePic} />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </motion.div>)}
