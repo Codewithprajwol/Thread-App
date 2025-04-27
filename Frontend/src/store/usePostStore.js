@@ -18,6 +18,9 @@ export const usePostStore=create((set,get)=>(
         isUserPostFetched:false,
         isUserPostError:null,
         isUserPostLoading:false,
+        isPostDeleting:false,
+        isPostDeletedSuccess:false,
+        isPostDeletedError:null,
         createUserPost:async({text,image,postedBy})=>{
             set({isPosting:true})
             try{
@@ -104,6 +107,20 @@ export const usePostStore=create((set,get)=>(
                 console.error("Error in getPostByusernameAndId:",error);
                 toast.error(error.response.data.error||"An error occured")
                 set({isUserPostLoading:false,isUserPostFetched:false,isUserPostError:error.response.data.error||"An error occured"})
+            }
+        },
+        deletePost:async({id})=>{
+            set({isPostDeleting:true,isPostDeletedSuccess:false,isPostDeletedError:null})
+            try{
+                const response=await axios.delete(`/post/${id}`)
+                if(response.status===200){
+                    set({posts:get().posts.filter((post)=>(post._id!==id)),isPostDeleting:false,isPostDeletedSuccess:true})
+                    toast.success("Post deleted successfully")
+                }
+            }catch(error){
+                console.error("Error in deletePost:",error);
+                set({isPostDeleting:false,isPostDeletedSuccess:false,isPostDeletedError:error.response.data.error||"An error occured"})
+                toast.error(error.response.data.error||"An error occured")
             }
         }
 

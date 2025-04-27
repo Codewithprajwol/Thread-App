@@ -1,6 +1,7 @@
 import Post from "../model/post.model.js";
 import User from "../model/user.model.js";
 import cloudinary from "../utils/Cloudinary.js";
+import Reply from "../model/reply.model.js";
 
 export const createPost=async(req,res)=>{
     const {text,image,postedBy}=req.body;
@@ -93,6 +94,11 @@ export const deletePost=async(req,res)=>{
                 return;
           }
           await Post.findByIdAndDelete(id);
+          if(post.image){
+            const publicId=post.image.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(`postImages/${publicId}`);
+          }
+          await Reply.deleteMany({postId:id});
           res.status(200).json({message:"post deleted successfully"});
      }catch(error){
           console.log("error in deletePost controller",error.message);

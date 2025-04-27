@@ -5,10 +5,15 @@ import { BsThreeDots } from 'react-icons/bs'
 import Action from './Action'
 import axiosInstance from "@/lib/axios"
 import {timeAgo} from "@/utils/timeFinder"
+import { useAuthStore } from "@/store/useAuthStore"
+import { Loader2, Trash } from "lucide-react"
+import { usePostStore } from "@/store/usePostStore"
 
 const Post = ({post}) => {
-
+    const user=useAuthStore((state)=>state.user);
     const [postUserProfile,setPostUserProfile]=useState(null)
+    const deletePost=usePostStore((state)=>state.deletePost);
+    const {isPostDeleting,isPostDeletedSuccess,isPostDeletedError}=usePostStore();
     useEffect(()=>{
         async function fetchUserProfile(){
             try{
@@ -21,7 +26,13 @@ const Post = ({post}) => {
             }
         }
         fetchUserProfile(); 
-    },[post.postedBy])
+    },[post?.postedBy])
+
+    const handleDeletePost=async(e)=>{
+            e.stopPropagation();
+            e.preventDefault();
+            deletePost({id:post?._id});
+    }
 
     return (
       <div className='w-full mt-4 flex items-start gap-3 justfiy-between pb-12'>
@@ -55,7 +66,7 @@ const Post = ({post}) => {
                  </div>
                  <div className="flex items-center gap-2">
                   <h6 className='font-bold text-[.8rem] text-[#dadada]'>{timeAgo(post.createdAt)}</h6>
-                  <BsThreeDots />
+                  {user?._id===post?.postedBy?isPostDeleting? <Loader2 className="w-5 h-5 animate-spin " />:<Trash onClick={handleDeletePost} size={20}/>:<BsThreeDots />}
                  </div>
                   
               </div>

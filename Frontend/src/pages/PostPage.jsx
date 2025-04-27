@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import Comments from "@/components/Comments";
 import { useParams } from "react-router-dom";
 import { usePostStore } from "@/store/usePostStore";
-import { Loader } from "lucide-react";
+import { Loader, Trash } from "lucide-react";
 import { timeAgo } from "@/utils/timeFinder";
 import toast from "react-hot-toast";
 import { useReplyStore } from "@/store/useReplyStore";
@@ -15,8 +15,10 @@ const PostPage = () => {
   const paramsData=useParams()
   const {post,postUserProfile, getPostByusernameAndId,isUserPostFetched,isUserPostError,isUserPostLoading}=usePostStore();
     const {replys,getReplys,isReplying}=useReplyStore();
+
   
-  useEffect(()=>{
+
+    useEffect(()=>{
      getPostByusernameAndId({username:paramsData.username,id:paramsData.id})
     if(isUserPostError){
       toast.error("Error fetching post");
@@ -55,7 +57,7 @@ const PostPage = () => {
           </div>
           <div className="flex items-center gap-2">
             <h6 className="font-bold text-[.8rem] text-[#dadada]">{timeAgo(post?.createdAt)}</h6>
-            <BsThreeDots />
+            {<BsThreeDots />}
           </div>
         </div>
         <p className="text-[0.8rem]">{post?.text}</p>
