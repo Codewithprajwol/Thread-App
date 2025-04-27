@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { BsThreeDots } from 'react-icons/bs'
 import Action from './Action'
 import axiosInstance from "@/lib/axios"
@@ -40,23 +40,23 @@ const Post = ({ post }) => {
     return (
         <div className='w-full mt-4 flex items-start gap-3 justify-between pb-12'>
             <div className='flex flex-col gap-2 items-center justify-start'>
-                <div className='flex items-center justify-between w-8 h-8 rounded-full overflow-hidden'>
+                <Link to={`/${postUserProfile?.username}`} className='flex items-center justify-between w-8 h-8 rounded-full overflow-hidden cursor-pointer'>
                     <img src={postUserProfile?.profilePic} alt={postUserProfile?.name} className='w-full h-full object-cover' />
-                </div>
+                </Link>
 
                 {post.image ? <div className=' h-[250px] sm:h-[370px] md:[400px] w-[.1rem] bg-[#c0baba42]'></div> : <div className=' h-[100px] w-[.1rem] bg-[#c0baba42]'></div>}
                 <div className='relative w-full'>
-                    {replys?.length=== 0 && (<motion.div
-                            animate={{ y: [0, -4, 0] }} // move left and come back
-                            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                            className="absolute bottom-0 left-1 w-6 h-6 rounded-full overflow-hidden"
-                        >
-                            🤔
-                            {/* <Avatar className="w-full h-full">
+                    {replys?.length === 0 && (<motion.div
+                        animate={{ y: [0, -4, 0] }} // move left and come back
+                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                        className="absolute bottom-0 left-1 w-6 h-6 rounded-full overflow-hidden"
+                    >
+                        🤔
+                        {/* <Avatar className="w-full h-full">
                                 <AvatarImage src={replys?.[0].profilePic} />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar> */}
-                        </motion.div>)}
+                    </motion.div>)}
                     {replys?.[1] && (
                         <motion.div
                             animate={{ y: [0, -4, 0] }} // move left and come back
@@ -100,7 +100,7 @@ const Post = ({ post }) => {
             <Link to={`/${postUserProfile?.username}/post/${post?._id}`} className='flex flex-1 flex-col gap-1'>
                 <div className='flex  items-center justify-between'>
                     <div className="flex items-center gap-2">
-                        <h6 className='font-bold'>{postUserProfile?.name}</h6>
+                        <Link to={`/${postUserProfile?.username}`} className='font-bold'>{postUserProfile?.name}</Link>
                         <div className='w-7 h-7'><img src="/verified.png" alt="verified logo" /></div>
                     </div>
                     <div className="flex items-center gap-2">
