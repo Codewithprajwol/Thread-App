@@ -3,12 +3,12 @@ import MessageContainer from '@/components/MessageContainer'
 import { Input } from '@/components/ui/input'
 // import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useMessageStore } from '@/store/userMessageStore'
+import { useMessageStore } from '@/store/useMessageStore'
 import { MessageSquare, SearchIcon } from 'lucide-react'
 import React, { useEffect } from 'react'
 
 const ChatPage = () => {
-    const { conversations, isUserConversationLoading, isUserConversationError, isUserConversationSuccess,getConversations } = useMessageStore()
+    const { conversations, isUserConversationLoading,selectedConversation, isUserConversationError, isUserConversationSuccess,getConversations } = useMessageStore()
     useEffect(() => {
         getConversations()
     }, [getConversations])
@@ -22,26 +22,26 @@ const ChatPage = () => {
               <Input className='grow-1' placeholder="search for the user"/>
               <SearchIcon className='cursor-pointer'/>
             </form>
-            {isUserConversationLoading &&  [1,3,4,5].map((_,index)=>( <div className="w-full flex items-center justify-around space-x-2 px-2">
+            {isUserConversationLoading &&  [1,3,4,5].map((_,index)=>( <div key={index} className="w-full flex items-center justify-around space-x-2 px-2">
       <Skeleton className="h-12 w-12 rounded-full shrink-0" />
       <div className="space-y-2 w-full">
         <Skeleton className="h-4 w-[150px]" />
         <Skeleton className="h-4 w-[100px]" />
       </div>
     </div>))}
-    {isUserConversationSuccess && conversations?.map((conversation)=><Conversation conversation={conversation}/>)}
+    {isUserConversationSuccess && conversations?.map((conversation)=><Conversation key={conversation._id} conversation={conversation}/>)}
      
    
            </div>
            {/* <Separator /> */}
            {/* message area */}
            <div className='w-[100%] md:w-[70%]  p-4 '>
-            {false && (<div className='h-full w-full flex items-center justify-center flex-col gap-2 '>
+            {!selectedConversation._id && (<div className='h-full w-full flex items-center justify-center flex-col gap-2 '>
               <MessageSquare size={100}/>
-              <p>Please Start the Conversation With SomeOne</p>
+              <p>Please Start the Conversation With Someone</p>
             </div>)}
 
-            <MessageContainer/>
+            {selectedConversation._id && <MessageContainer/>}
            </div>
         </div>
     </div>

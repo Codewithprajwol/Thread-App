@@ -1,18 +1,30 @@
 import { useAuthStore } from '@/store/useAuthStore'
+import { useMessageStore } from '@/store/useMessageStore';
 import React from 'react'
+import { BsCheck2All } from 'react-icons/bs';
 
-const Conversation = ({conversation}) => {
-  const user=useAuthStore((state)=>state.user);
-  const [otherUser]=conversation?.participants.filter((participant)=>participant._id!==user._id);
-  console.log(otherUser)
+const Conversation = ({ conversation }) => {
+  const user = useAuthStore((state) => state.user);
+  const [otherUser] = conversation?.participants.filter((participant) => participant._id !== user._id);
+  const selectedconversation = useMessageStore((state) => state.selectedConversation);
+  const setSelectedConversation = useMessageStore((state) => state.setSelectedConversation);
+
+  const handleSelectedConversation = () => {
+    setSelectedConversation({
+      _id: conversation._id,
+      userName: otherUser.name,
+      userprofilePic: otherUser.profilePic,
+      userId: otherUser._id,
+    });
+  };
   return (
-    <div className="w-full flex items-center justify-around pt-1 space-x-2 px-2">
+    <div onClick={handleSelectedConversation} className={`w-full flex  items-start justify-around  space-x-2 p-2 ${selectedconversation?._id===conversation?._id?'bg-gray-500/50':''} hover:bg-gray-500/50 cursor-pointer rounded-md transition-all duration-200 ease-in-out`}>
       <div className='h-12 w-12 rounded-full shrink-0 overflow-hidden'>
         <img src={otherUser.profilePic} alt="@shadcn" className='w-full h-full object-cover' />
       </div>
       <div className="space-y-2 w-full flex flex-col justify-start leading-none">
         <div className="w-[100%] flex items-center justfiy-start gap-2" >{otherUser.name} <img src='./verified.png' alt="Verified" className='h-5' /></div>
-        <div className=" w-[100%]" >{conversation?.lastMessage?.text}</div>
+        <div className=" w-[100%] flex items-center justfiy-start gap-2" >{conversation?.lastMessage?.sender === user._id ? <BsCheck2All /> : null}{<span>{conversation?.lastMessage?.text.length > 10 ? conversation?.lastMessage?.text.substring(0, 10) + '...' : conversation?.lastMessage?.text}</span>}</div>
       </div>
     </div>
   )
