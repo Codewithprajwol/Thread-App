@@ -3,10 +3,16 @@ import MessageContainer from '@/components/MessageContainer'
 import { Input } from '@/components/ui/input'
 // import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useMessageStore } from '@/store/userMessageStore'
 import { MessageSquare, SearchIcon } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const ChatPage = () => {
+    const { conversations, isUserConversationLoading, isUserConversationError, isUserConversationSuccess,getConversations } = useMessageStore()
+    useEffect(() => {
+        getConversations()
+    }, [getConversations])
+
   return (
     <div className='pt-5 absolute w-full sm:w-[100%] md:w-[80%] lg:w-[750px] left-[50%] -translate-x-[50%]'>
         <div className='flex w-full gap-5 justify-start flex-col mx-auto md:flex-row md:max-w-[100%] lg:max-w-[100%]'>
@@ -16,16 +22,16 @@ const ChatPage = () => {
               <Input className='grow-1' placeholder="search for the user"/>
               <SearchIcon className='cursor-pointer'/>
             </form>
-            {false &&  [1,3,4,5].map((_,index)=>( <div className="w-full flex items-center justify-around space-x-2 px-2">
+            {isUserConversationLoading &&  [1,3,4,5].map((_,index)=>( <div className="w-full flex items-center justify-around space-x-2 px-2">
       <Skeleton className="h-12 w-12 rounded-full shrink-0" />
       <div className="space-y-2 w-full">
         <Skeleton className="h-4 w-[150px]" />
         <Skeleton className="h-4 w-[100px]" />
       </div>
     </div>))}
-     <Conversation/>
-     <Conversation/>
-     <Conversation/>
+    {isUserConversationSuccess && conversations?.map((conversation)=><Conversation conversation={conversation}/>)}
+     
+   
            </div>
            {/* <Separator /> */}
            {/* message area */}
