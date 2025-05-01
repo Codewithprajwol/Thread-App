@@ -42,15 +42,28 @@ export const useMessageStore=create((set,get)=>({
             console.error("Error fetching messages:", error);
         }
     },
-    sendMessage:async(text,recipientId)=>{
+    sendMessage:async(text,recipientId,currentConversationId)=>{
         try{
             const response=await axios.post('/message',{text,recipientId })
             if(response.status===200){
                 set({messages:[...get().messages,response.data.message]})
+                const updatedConversation=get().conversations.map((conversation)=>{
+                     if(conversation._id===currentConversationId){
+                        return {
+                            ...conversation,
+                            lastMessage:{
+                                sender:response.data.message.sender,
+                                text:text
+                            }
+                        }
+                     }
+                     return conversation;
+                })
+                set({conversations: updatedConversation});
             }
         }catch(error){
             console.error("Error sending message:", error);
         }
     },
-    
+
  }))
