@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
 import Message from "./Message";
@@ -8,6 +8,12 @@ import { useMessageStore } from "@/store/useMessageStore";
 const MessageContainer = () => {
     const selectedconversation = useMessageStore((state) => state.selectedConversation);
     const {getMessages,isUserMessageLoading,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
+    const scrollRef=useRef(null);
+    useEffect(()=>{
+        if (scrollRef.current) {
+            scrollRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    },[messages])
     useEffect(()=>{
         getMessages(selectedconversation.userId);
     },[getMessages,selectedconversation.userId])
@@ -46,6 +52,7 @@ const MessageContainer = () => {
             })
         )}
         {isUserMessageSuccess && messages?.map((message,index)=>(<Message key={message._id} message={message.text} ownMessage={message.sender !== selectedconversation.userId}/>))}
+        <div className="w-0 h-0" ref={scrollRef}></div>
         <MessagingInput/>
       </div>
     </div>

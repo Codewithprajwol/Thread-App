@@ -9,7 +9,6 @@ import React, { useEffect } from 'react'
 
 const ChatPage = () => {
     const { conversations, isUserConversationLoading,selectedConversation, isUserConversationError, isUserConversationSuccess,getConversations } = useMessageStore()
-    console.log(selectedConversation)
     useEffect(() => {
         getConversations()
     }, [getConversations])
