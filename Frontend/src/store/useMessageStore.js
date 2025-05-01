@@ -41,6 +41,16 @@ export const useMessageStore=create((set,get)=>({
             set({isUserMessageError:true})
             console.error("Error fetching messages:", error);
         }
-    }
-
+    },
+    sendMessage:async(text,recipientId)=>{
+        try{
+            const response=await axios.post('/message',{text,recipientId })
+            if(response.status===200){
+                set({messages:[...get().messages,response.data.message]})
+            }
+        }catch(error){
+            console.error("Error sending message:", error);
+        }
+    },
+    
  }))

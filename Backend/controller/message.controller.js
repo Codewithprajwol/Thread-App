@@ -3,19 +3,19 @@ import Message from "../model/Message.model.js";
 
 export const sendMessage=async(req,res)=>{
     try{
-        const {senderId,text}=req.body;
+        const {recipientId,text}=req.body;
         const user=req.user;
         if(!user){
             return res.status(401).json({error:"Unauthorized"})
         }
-        if(!senderId||!text){
+        if(!recipientId||!text){
             return res.status(400).json({error:"All fields are required"})
         }
         let conversation;
-         conversation=await Conversation.findOne({participants:{$all: [senderId,user._id]}});
+         conversation=await Conversation.findOne({participants:{$all: [recipientId,user._id]}});
         if(!conversation){
             conversation= new Conversation({
-                participants:[senderId,user._id],
+                participants:[recipientId,user._id],
                 lastMesssage:{
                     sender:user._id,
                     text:text

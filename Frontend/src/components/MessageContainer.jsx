@@ -8,12 +8,11 @@ import { useMessageStore } from "@/store/useMessageStore";
 const MessageContainer = () => {
     const selectedconversation = useMessageStore((state) => state.selectedConversation);
     const {getMessages,isUserMessageLoading,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
-    console.log(messages)
     useEffect(()=>{
         getMessages(selectedconversation.userId);
     },[getMessages,selectedconversation.userId])
   return (
-    <div className="h-full w-full relative ">
+    <div className="h-full w-full relative">
       <div className="flex items-center justify-start gap-3">
         <div className="h-12 w-12 rounded-full overflow-hidden">
           <img
@@ -28,7 +27,7 @@ const MessageContainer = () => {
         </div>
       </div>
       <Separator className="mt-2" orientation="horizontal" />
-      <div className="w-full h-[400px] overflow-y-auto message-scroll pr-[8px]">
+      <div className="w-full h-[400px] overflow-y-auto message-scroll pr-[8px] pb-[8px]">
         {isUserMessageLoading && (
             [...Array(7)].map((_,index)=>{
                 return(
@@ -46,7 +45,7 @@ const MessageContainer = () => {
                 ) 
             })
         )}
-        {isUserMessageSuccess && messages?.map((message,index)=>(<Message key={message._id}/>))}
+        {isUserMessageSuccess && messages?.map((message,index)=>(<Message key={message._id} message={message.text} ownMessage={message.sender !== selectedconversation.userId}/>))}
         <MessagingInput/>
       </div>
     </div>
