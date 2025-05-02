@@ -13,7 +13,7 @@ const ChatPage = () => {
     const { conversations, isUserConversationLoading,selectedConversation, isUserConversationError, isUserConversationSuccess,getConversations } = useMessageStore()
     const [searchUserText,setSearchUserText]=useState('');
     const {chatUserSearch,isChatUserSearchLoading,isChatUserSearchError,isChatUserSearchSuccess,setSelectedConversation}=useMessageStore()
-    const {socket,onlineUsers}=useSocket()
+    const {onlineUsers}=useSocket()
     const user=useAuthStore((state=>state.user))
   
     useEffect(() => {

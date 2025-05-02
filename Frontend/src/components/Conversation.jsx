@@ -9,7 +9,6 @@ const Conversation = ({ conversation,isOnline }) => {
   const selectedconversation = useMessageStore((state) => state.selectedConversation);
   const setSelectedConversation = useMessageStore((state) => state.setSelectedConversation);
 
-
   const handleSelectedConversation = () => {
     setSelectedConversation({
       _id: conversation._id,

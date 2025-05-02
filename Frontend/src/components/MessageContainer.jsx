@@ -4,34 +4,46 @@ import { Skeleton } from "./ui/skeleton";
 import Message from "./Message";
 import MessagingInput from "./MessagingInput";
 import { useMessageStore } from "@/store/useMessageStore";
+import { useSocket } from "@/context/SocketContext";
 
 const MessageContainer = () => {
-    const selectedconversation = useMessageStore((state) => state.selectedConversation);
-    const {getMessages,isUserMessageLoading,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
+    const {getMessages,selectedConversation:selectedconversation,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
     const scrollRef=useRef(null);
+    const {socket}=useSocket();
+
+    useEffect(()=>{
+       socket?.on('messageReceived',(message)=>{
+        console.log('messageconversation',message.conversationId)
+        console.log('selectedconversation',selectedconversation._id)
+        if(message.conversationId ===selectedconversation._id){
+        setMessages(message);
+        }
+    })
+    },[socket])
+
     useEffect(()=>{
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: "smooth" });
         }
     },[messages])
     useEffect(()=>{
-      if (selectedconversation.mock) return;
-      if (selectedconversation.userId) {
-        getMessages(selectedconversation.userId);
+      if (selectedconversation?.mock) return;
+      if (selectedconversation?.userId) {
+        getMessages(selectedconversation?.userId);
       }
-    },[getMessages,selectedconversation.userId,selectedconversation.mock])
+    },[getMessages,selectedconversation?.userId,selectedconversation?.mock])
   return (
     <div className="h-full w-full relative">
       <div className="flex items-center justify-start gap-3">
         <div className="h-12 w-12 rounded-full overflow-hidden">
           <img
             className="w-full h-full object-cover "
-            src={selectedconversation.userprofilePic}
+            src={selectedconversation?.userprofilePic}
             alt="@shadcn"
           />
         </div>
         <div className="flex gap-2 items-center justify-center">
-          <span className="text-xl font-semibold">{selectedconversation.userName}</span>{" "}
+          <span className="text-xl font-semibold">{selectedconversation?.userName}</span>{" "}
           <img className="w-6 h-6" src="./verified.png"></img>
         </div>
       </div>

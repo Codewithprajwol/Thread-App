@@ -11,6 +11,7 @@ export const useMessageStore=create((set,get)=>({
         userprofilePic:"",
         userId:"",
     },
+    setMessages:(message)=>set({messages:[...get().messages,message]}),
     setSelectedConversation:(conversation)=>set({selectedConversation:conversation}),
     isUserConversationLoading:false,
     isUserConversationError:false,
