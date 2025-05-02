@@ -83,9 +83,16 @@ export const getConversation=async(req,res)=>{
         }).populate({
             path:'participants',
             select:'name profilePic',
-        }).sort({updatedAt: -1});
+        }).sort({updatedAt: -1}).lean();
+        if(!conversations){
+            return res.status(404).json({error:"Conversations not found"})
+        }
+        const formattedConversations=conversations.map((conversation)=>{
+            const finalConversationData={...conversation,participants:conversation.participants.filter((participant)=>participant._id.toString()!==user._id.toString())}
+            return finalConversationData;
+        })
 
-        res.status(200).json({conversations: conversations});
+        res.status(200).json({conversations: formattedConversations});
 
     }catch(error){
         console.error("Error in getConversation:",error);

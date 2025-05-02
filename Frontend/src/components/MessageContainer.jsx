@@ -15,8 +15,11 @@ const MessageContainer = () => {
         }
     },[messages])
     useEffect(()=>{
+      if (selectedconversation.mock) return;
+      if (selectedconversation.userId) {
         getMessages(selectedconversation.userId);
-    },[getMessages,selectedconversation.userId])
+      }
+    },[getMessages,selectedconversation.userId,selectedconversation.mock])
   return (
     <div className="h-full w-full relative">
       <div className="flex items-center justify-start gap-3">
@@ -51,10 +54,11 @@ const MessageContainer = () => {
                 ) 
             })
         )}
-        {isUserMessageSuccess && messages?.map((message,index)=>(<Message key={message._id} message={message.text} ownMessage={message.sender !== selectedconversation.userId}/>))}
+        { messages?.map((message,index)=>(<Message key={message._id} message={message.text} ownMessage={message.sender !== selectedconversation.userId}/>))}
         <div className="w-0 h-0" ref={scrollRef}></div>
         <MessagingInput/>
       </div>
+
     </div>
   );
 };
