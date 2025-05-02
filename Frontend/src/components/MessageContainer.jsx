@@ -10,15 +10,22 @@ const MessageContainer = () => {
     const {getMessages,selectedConversation:selectedconversation,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
     const scrollRef=useRef(null);
     const {socket}=useSocket();
+const selectedConversationRef = useRef(selectedconversation);
+
+// keep ref in sync with latest selectedconversation
+useEffect(() => {
+  selectedConversationRef.current = selectedconversation;
+}, [selectedconversation]);
 
     useEffect(()=>{
        socket?.on('messageReceived',(message)=>{
-        console.log('messageconversation',message.conversationId)
-        console.log('selectedconversation',selectedconversation._id)
-        if(message.conversationId ===selectedconversation._id){
+        if(message.conversationId ===selectedConversationRef.current._id){
         setMessages(message);
         }
     })
+    return ()=>{
+        socket?.off('messageReceived');
+    }
     },[socket])
 
     useEffect(()=>{

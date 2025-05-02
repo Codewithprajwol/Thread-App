@@ -8,7 +8,6 @@ const MessagingInput = () => {
   const [message,setMessage]=useState('');
   const selectedConversation=useMessageStore((state)=>state.selectedConversation);
   const sendMessage=useMessageStore((state)=>state.sendMessage);
-
    const handleSendClick=async(e)=>{
         e.preventDefault();
        await sendMessage(message, selectedConversation.userId,selectedConversation._id);
