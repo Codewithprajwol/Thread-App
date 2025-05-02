@@ -3,6 +3,8 @@ import MessageContainer from '@/components/MessageContainer'
 import { Input } from '@/components/ui/input'
 // import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useSocket } from '@/context/SocketContext'
+import { useAuthStore } from '@/store/useAuthStore'
 import { useMessageStore } from '@/store/useMessageStore'
 import { Loader2, MessageSquare, SearchIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
@@ -11,6 +13,9 @@ const ChatPage = () => {
     const { conversations, isUserConversationLoading,selectedConversation, isUserConversationError, isUserConversationSuccess,getConversations } = useMessageStore()
     const [searchUserText,setSearchUserText]=useState('');
     const {chatUserSearch,isChatUserSearchLoading,isChatUserSearchError,isChatUserSearchSuccess,setSelectedConversation}=useMessageStore()
+    const {socket,onlineUsers}=useSocket()
+    const user=useAuthStore((state=>state.user))
+  
     useEffect(() => {
         getConversations();
     }, [getConversations])
@@ -19,7 +24,7 @@ const ChatPage = () => {
 
     const handleChatUserSearch=async(e)=>{
        e.preventDefault();
-      await chatUserSearch(searchUserText);
+      await chatUserSearch(searchUserText,user);
       setSearchUserText('');
     }
 
@@ -39,7 +44,7 @@ const ChatPage = () => {
         <Skeleton className="h-4 w-[100px]" />
       </div>
     </div>))}
-    {isUserConversationSuccess && conversations?.map((conversation)=><Conversation key={conversation._id} conversation={conversation}/>)}
+    {isUserConversationSuccess && conversations?.map((conversation)=><Conversation key={conversation._id} isOnline={onlineUsers.includes(conversation.participants[0]._id)} conversation={conversation}/>)}
      
    
            </div>

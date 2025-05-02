@@ -71,7 +71,7 @@ export const useMessageStore=create((set,get)=>({
             console.error("Error sending message:", error);
         }
     },
-    chatUserSearch:async(searchText)=>{
+    chatUserSearch:async(searchText,user)=>{
         let updatedSearchText;
         if(!searchText.trim().startsWith('@')){
             toast.error("Please enter a valid username with @"); return;
@@ -82,8 +82,13 @@ export const useMessageStore=create((set,get)=>({
         try{
             const response=await axios.get(`/user/profile/${updatedSearchText}`)
             if(response.status===200){
-                set({searchChatUserProfile:response.data.user,isChatUserSearchLoading:false,isChatUserSearchSuccess:true})
+                set({isChatUserSearchLoading:false,isChatUserSearchSuccess:true})
+                if(response.data.user._id===user._id){
+                    toast.error("You cannot start a conversation with yourself")
+                    return;
+                }
                 const isUserInConversation=get().conversations.find((conversation)=>conversation.participants[0]._id===response.data.user._id);
+                
                 if(isUserInConversation){
                     set({selectedConversation:{
                         _id:isUserInConversation._id,
