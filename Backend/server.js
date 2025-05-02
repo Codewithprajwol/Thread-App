@@ -9,10 +9,10 @@ import messageRoute from './routes/message.routes.js'
 import { connectDb } from './config/db.config.js';
 import cookieParser from 'cookie-parser';
 
-const app=express();
+import {app, server} from './socket/socket.js'
+
 
 const PORT=process.env.PORT || 3000;
-
 
 app.use(express.json({limit:'10mb'}));
 app.use(cookieParser());
@@ -22,7 +22,7 @@ app.use('/api/post',postRoute);
 app.use('/api/reply',replyRoute)
 app.use('/api/message',messageRoute);
 
-app.listen(PORT,async()=>{
+server.listen(PORT,async()=>{
    await connectDb()
     console.log("server is listening at port",PORT);
 })
