@@ -5,17 +5,37 @@ import Message from "./Message";
 import MessagingInput from "./MessagingInput";
 import { useMessageStore } from "@/store/useMessageStore";
 import { useSocket } from "@/context/SocketContext";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const MessageContainer = () => {
-    const {getMessages,selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
+    const {getMessages, setLastSeenMessages,setLastSeenConversationMessages, selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
     const scrollRef=useRef(null);
     const {socket}=useSocket();
+    const user=useAuthStore((state=>state.user))
 const selectedConversationRef = useRef(selectedconversation);
 
-// keep ref in sync with latest selectedconversation
 useEffect(() => {
   selectedConversationRef.current = selectedconversation;
 }, [selectedconversation]);
+
+console.log(messages)
+
+// useEffect(()=>{
+//   const lastMessageFromOtherUser=messages.length && messages[messages.length-1].sender!==user._id;
+//   if(lastMessageFromOtherUser){
+//     const latestSelectedConversation=selectedConversationRef.current;
+//     socket?.emit("markMessageAsSeen",{
+//       conversationId:latestSelectedConversation._id,
+//       userId:latestSelectedConversation.userId,
+//     })
+//   }
+//   socket?.on("messageSeen",({conversationId})=>{
+//     if(conversationId === selectedConversationRef.current._id){
+//       setLastSeenMessages(conversationId);
+//       setLastSeenConversationMessages(conversationId);
+//     }
+//   })
+// },[socket,selectedConversationRef.current,user._id,messages])
 
     useEffect(()=>{
        socket?.on('messageReceived',(message)=>{
@@ -28,19 +48,23 @@ useEffect(() => {
     return ()=>{
         socket?.off('messageReceived');
     }
-    },[socket])
+    },[socket,setMessages,setConversations,selectedConversationRef.current._id])
 
     useEffect(()=>{
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: "smooth" });
         }
     },[messages])
+
     useEffect(()=>{
       if (selectedconversation?.mock) return;
+      console.log('i am here')
+      setMessages([])
       if (selectedconversation?.userId) {
         getMessages(selectedconversation?.userId);
       }
     },[getMessages,selectedconversation?.userId,selectedconversation?.mock])
+
   return (
     <div className="h-full w-full relative">
       <div className="flex items-center justify-start gap-3">
@@ -75,7 +99,7 @@ useEffect(() => {
                 ) 
             })
         )}
-        { messages?.map((message,index)=>(<Message key={message._id} message={message.text} ownMessage={message.sender !== selectedconversation.userId}/>))}
+        { messages?.map((message,index)=>(<Message key={message._id} seen={message.seen} message={message.text} ownMessage={message.sender !== selectedconversation.userId}/>))}
         <div className="w-0 h-0" ref={scrollRef}></div>
         <MessagingInput/>
       </div>

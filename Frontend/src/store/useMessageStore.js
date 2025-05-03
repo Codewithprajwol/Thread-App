@@ -29,6 +29,33 @@ export const useMessageStore=create((set,get)=>({
         })
         set({conversations: updatedConversation});
     },
+    setLastSeenMessages:(conversationId)=>{
+        const updatedMessages=get().messages.map((message)=>{
+            if(message.conversationId===conversationId){
+                return {
+                    ...message,
+                    seen:true
+                }
+            }
+            return message;
+        })
+        set({messages: updatedMessages});
+    },
+    setLastSeenConversationMessages:(conversationId)=>{
+        const updatedConversations=get().conversations.map((conversation)=>{
+            if(conversation._id===conversationId){
+                return {
+                    ...conversation,
+                    lastMessage:{
+                        ...conversation.lastMessage,
+                        seen:true
+                    }
+                }
+            }
+            return conversation;
+        })
+        set({conversations: updatedConversations});
+    },    
     setSelectedConversation:(conversation)=>set({selectedConversation:conversation}),
     isUserConversationLoading:false,
     isUserConversationError:false,

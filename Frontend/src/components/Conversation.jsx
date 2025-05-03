@@ -26,7 +26,7 @@ const Conversation = ({ conversation,isOnline }) => {
       </div>
       <div className="space-y-2 w-full flex flex-col justify-start leading-none">
         <div className="w-[100%] text-[1rem] flex items-center justify-start gap-2 whitespace-nowrap" >{otherUser.name} <img src='./verified.png' alt="Verified" className='h-5' /></div>
-        <div className=" text-sm w-[100%] flex items-center justify-start gap-2" >{conversation?.lastMessage?.sender === user._id ? <BsCheck2All /> : null}{<span>{conversation?.lastMessage?.text.length > 10 ? conversation?.lastMessage?.text.substring(0, 10) + '...' : conversation?.lastMessage?.text}</span>}</div>
+        <div className=" text-sm w-[100%] flex items-center justify-start gap-2" >{conversation?.lastMessage?.sender === user._id ? <BsCheck2All className={conversation?.lastMessage?.seen?'text-blue-600':''} /> : null}{<span>{conversation?.lastMessage?.text.length > 10 ? conversation?.lastMessage?.text.substring(0, 10) + '...' : conversation?.lastMessage?.text}</span>}</div>
       </div>
     </div>
   )
