@@ -7,7 +7,7 @@ import { useMessageStore } from "@/store/useMessageStore";
 import { useSocket } from "@/context/SocketContext";
 
 const MessageContainer = () => {
-    const {getMessages,selectedConversation:selectedconversation,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
+    const {getMessages,selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
     const scrollRef=useRef(null);
     const {socket}=useSocket();
 const selectedConversationRef = useRef(selectedconversation);
@@ -22,6 +22,8 @@ useEffect(() => {
         if(message.conversationId ===selectedConversationRef.current._id){
         setMessages(message);
         }
+        console.log(message)
+        setConversations(message);
     })
     return ()=>{
         socket?.off('messageReceived');

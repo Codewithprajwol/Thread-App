@@ -12,6 +12,23 @@ export const useMessageStore=create((set,get)=>({
         userId:"",
     },
     setMessages:(message)=>set({messages:[...get().messages,message]}),
+    setConversations:(message)=>{
+      const updatedConversation=  get().conversations.map((conversation)=>{
+            if(conversation._id===message.conversationId){
+                return {
+                    ...conversation,
+                    lastMessage:{
+                        sender:message.sender,
+                        text:message.text
+                    }
+                }
+
+
+            }
+            return conversation;
+        })
+        set({conversations: updatedConversation});
+    },
     setSelectedConversation:(conversation)=>set({selectedConversation:conversation}),
     isUserConversationLoading:false,
     isUserConversationError:false,
