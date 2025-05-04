@@ -8,7 +8,7 @@ import { useSocket } from "@/context/SocketContext";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const MessageContainer = () => {
-    const {getMessages,setMessageAsEmpty, setLastSeenMessages,setLastSeenConversationMessages, selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
+    const {getMessages,setMessageAsEmpty, setLastSeenMessages,setLastSeenConversationMessages, selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess,setMockConversations}=useMessageStore()
     const scrollRef=useRef(null);
     const {socket}=useSocket();
     const user=useAuthStore((state=>state.user))
@@ -35,6 +35,41 @@ useEffect(()=>{
     }
   })
 },[socket,selectedConversationRef.current,user._id,messages])
+
+
+useEffect(() => {
+  if (!socket || !socket.connected) return;
+
+  const handleReceiverConversation = ({ senderId, conversationId, senderName, senderProfilePic }) => {
+    console.log(senderId, conversationId, senderName, senderProfilePic);
+    console.log("i came here too");
+
+    const mockUser = {
+      mock: true,
+      participants: [
+        {
+          _id: senderId,
+          name: senderName,
+          profilePic: senderProfilePic,
+        },
+      ],
+      lastMessage: {
+        sender: senderId,
+        text: "",
+      },
+      _id: conversationId,
+    };
+
+    setMockConversations(mockUser);
+  };
+
+  socket.on("ReceiverConversation", handleReceiverConversation);
+
+  return () => {
+    socket.off("ReceiverConversation", handleReceiverConversation);
+  };
+}, [setMockConversations, socket]);
+
 
     useEffect(()=>{
       socket?.on('messageReceived',(message)=>{

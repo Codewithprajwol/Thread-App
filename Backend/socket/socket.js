@@ -34,6 +34,13 @@ io.on('connection',(socket)=>{
         await Conversation.updateOne({_id:conversationId},{$set:{"lastMessage.seen":true}});
         socket.to(userSocketMap[userId]).emit('messageSeen',{conversationId});
     })
+
+    socket.on("updateReceiverConversation",async({recieverId,senderId,conversationId,senderName,senderProfilePic})=>{
+        console.log("i came here");
+        console.log(userSocketMap[recieverId]);
+        // const messages=await Message.find({recieverId}).sort({createdAt:-1}).limit(1);
+        socket.to(userSocketMap[recieverId]).emit('ReceiverConversation',{senderId,conversationId,senderName,senderProfilePic});
+    })
     
     socket.on('disconnect',()=>{
         delete userSocketMap[userId];

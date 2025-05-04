@@ -13,6 +13,9 @@ export const useMessageStore=create((set,get)=>({
     },
     setMessageAsEmpty:()=>set({messages:[]}),
     setMessages:(message)=>set({messages:[...get().messages,message]}),
+    setMockConversations:(conversation)=>{
+        set({conversations:[...get().conversations,conversation]});
+    },
     setConversations:(message)=>{
       const updatedConversation=  get().conversations.map((conversation)=>{
             if(conversation._id===message.conversationId){
