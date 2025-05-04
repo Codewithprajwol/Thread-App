@@ -11,6 +11,7 @@ export const useMessageStore=create((set,get)=>({
         userprofilePic:"",
         userId:"",
     },
+    setMessageAsEmpty:()=>set({messages:[]}),
     setMessages:(message)=>set({messages:[...get().messages,message]}),
     setConversations:(message)=>{
       const updatedConversation=  get().conversations.map((conversation)=>{

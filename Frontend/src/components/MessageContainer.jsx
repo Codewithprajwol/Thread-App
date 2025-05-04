@@ -8,7 +8,7 @@ import { useSocket } from "@/context/SocketContext";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const MessageContainer = () => {
-    const {getMessages, setLastSeenMessages,setLastSeenConversationMessages, selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
+    const {getMessages,setMessageAsEmpty, setLastSeenMessages,setLastSeenConversationMessages, selectedConversation:selectedconversation,setConversations,isUserMessageLoading,setMessages,isUserMessageError,messages,isUserMessageSuccess}=useMessageStore()
     const scrollRef=useRef(null);
     const {socket}=useSocket();
     const user=useAuthStore((state=>state.user))
@@ -18,31 +18,29 @@ useEffect(() => {
   selectedConversationRef.current = selectedconversation;
 }, [selectedconversation]);
 
-console.log(messages)
 
-// useEffect(()=>{
-//   const lastMessageFromOtherUser=messages.length && messages[messages.length-1].sender!==user._id;
-//   if(lastMessageFromOtherUser){
-//     const latestSelectedConversation=selectedConversationRef.current;
-//     socket?.emit("markMessageAsSeen",{
-//       conversationId:latestSelectedConversation._id,
-//       userId:latestSelectedConversation.userId,
-//     })
-//   }
-//   socket?.on("messageSeen",({conversationId})=>{
-//     if(conversationId === selectedConversationRef.current._id){
-//       setLastSeenMessages(conversationId);
-//       setLastSeenConversationMessages(conversationId);
-//     }
-//   })
-// },[socket,selectedConversationRef.current,user._id,messages])
+useEffect(()=>{
+  const lastMessageFromOtherUser=messages.length && messages[messages.length-1].sender!==user._id;
+  if(lastMessageFromOtherUser){
+    const latestSelectedConversation=selectedConversationRef.current;
+    socket?.emit("markMessageAsSeen",{
+      conversationId:latestSelectedConversation._id,
+      userId:latestSelectedConversation.userId,
+    })
+  }
+  socket?.on("messageSeen",({conversationId})=>{
+    if(conversationId === selectedConversationRef.current._id){
+      setLastSeenMessages(conversationId);
+      setLastSeenConversationMessages(conversationId);
+    }
+  })
+},[socket,selectedConversationRef.current,user._id,messages])
 
     useEffect(()=>{
-       socket?.on('messageReceived',(message)=>{
+      socket?.on('messageReceived',(message)=>{
         if(message.conversationId ===selectedConversationRef.current._id){
-        setMessages(message);
+          setMessages(message);
         }
-        console.log(message)
         setConversations(message);
     })
     return ()=>{
@@ -57,9 +55,8 @@ console.log(messages)
     },[messages])
 
     useEffect(()=>{
+      setMessageAsEmpty();
       if (selectedconversation?.mock) return;
-      console.log('i am here')
-      setMessages([])
       if (selectedconversation?.userId) {
         getMessages(selectedconversation?.userId);
       }
